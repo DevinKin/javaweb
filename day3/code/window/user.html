@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html;charset=utf-8">
+	<title>选择界面</title>
+	<style type="text/css">
+		td {
+			width: 100px;
+			height: 30px;
+			align-items: 
+		}
+	</style>
+</head>
+<body>
+	<table border="1" align="center">
+		<tr align="center">
+			<td>操作</td>
+			<td>编号</td>
+			<td>姓名</td>
+		</tr>
+
+		<tr align="center">
+			<td>
+				<input type="button" id="bid1" value="选择" onclick="button1();">
+			</td>
+			<td id="id1">001</td>
+			<td id="nid1">张三</td>
+		</tr>
+
+		<tr align="center">
+			<td>
+				<input type="button" id="bid2" value="选择" onclick="button2();">
+			</td>
+			<td id="id2">002</td>
+			<td id="nid2">李四</td>
+		</tr>
+
+		<tr align="center">
+			<td>
+				<input type="button" id="bid3" value="选择" onclick="button3();">
+			</td>
+			<td id="id3">003</td>
+			<td id="nid3">老王</td>
+		</tr>
+	</table>
+	<script type="text/javascript">
+		
+		function button1() {
+			// 跨页面操作
+			var pwin = window.opener;
+			var name = document.getElementById('nid1');
+			pwin.document.getElementById('nameid').value = name.innerHTML;
+			var num = document.getElementById('id1');
+			pwin.document.getElementById('numid').value = num.innerHTML;
+			window.close();
+		}
+		function button2() {
+			var pwin = window.opener;
+			var name = document.getElementById('nid2');
+			pwin.document.getElementById('nameid').value = name.innerHTML;
+			var num = document.getElementById('id2');
+			pwin.document.getElementById('numid').value = num.innerHTML;
+			window.close();
+		}
+		function button3() {
+			var pwin = window.opener;
+			var name = document.getElementById('nid3');
+			pwin.document.getElementById('nameid').value = name.innerHTML;
+			var num = document.getElementById('id3');
+			pwin.document.getElementById('numid').value = num.innerHTML;
+
+			window.close();
+		}
+	</script>
+</body>
+
+</html>

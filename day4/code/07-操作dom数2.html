@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>HTML实例</title>
+	<style type="text/css">
+		
+	</style>
+</head>
+<body>
+	<ul id="ulid">
+		<li id="li11">小黄</li>
+		<li id="li12">老王</li>
+		<li id="li13">王昭君</li>
+		<li id="li14">貂蝉</li>
+	</ul>
+
+	<input type="button" value="insert" onclick="insert1();">
+</body>
+	<script type="text/javascript">
+		// 在<li>王昭君</li>之前插入<li>董小宛</li>
+		function insert1() {
+			/*
+				1、获取li13标签
+				2、创建li
+				3、创建文本
+				4、把文本添加到li下面
+				5、获取到ul
+				6、把li添加到ul下面
+			 */
+			// 1
+			var li13 = document.getElementById("li13");
+			//2
+			var li15 = document.createElement("li");
+			//3
+			var text15 = document.createTextNode("董小宛");
+			//4
+			li15.appendChild(text15);
+			//5
+			var ul = document.getElementById("ulid");
+			// 6
+			ul.insertBefore(li15, li13);
+		}
+	</script>
+</html>

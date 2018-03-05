@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML实例</title>
+	<style type="text/css">
+		
+	</style>
+</head>
+<body>
+	<input type="text" class="haha" id="inputid" value="aaa"/>
+</body>
+	<script type="text/javascript">
+		// 先要获取到input标签
+		var input1 = document.getElementById("inputid");
+
+		input1.setAttribute("class", "gougou");
+
+		alert(input1.getAttribute("value"));
+		input1.removeAttribute("value");
+		alert(input1.getAttribute("value"));
+	</script>
+</html>

@@ -1,0 +1,324 @@
+1、JavaScript的String对象
+	(1) 创建String对象
+		- var str="abc"
+
+	(2) 属性:
+		length: 字符串的长度
+
+	(3) 方法:
+		- 与html相关的方法
+			- bold(): 加粗字体
+
+			- fontcolor(): 字体颜色
+
+			- fontsize(): 字体大小,范围1-7
+
+			- link(): 将字符串显示为超链接
+						str4.link("http://www.baidu.com")
+
+			- sub(): 设置下标
+
+			- sup(): 设置上标
+
+		- 与java相似的方法
+			- concat(): 连接字符串方法
+
+			- charAt(): 范围指定位置的字符串
+	document.write(str1.charAt(3)); //字符位置不存在，返回null
+
+			- indexOf(): 索引字符串，范围字符串的位置
+	document.write(str4.indexOf("qw"));	// 字符不存在，返回-1
+
+			- split(): 切分字符串为数组
+
+			- replace(old, new): 替换字符串
+
+			- substr(pos, len): 从pos位开始向后截取len个字符
+
+			- substring(str, end): [str,end) 的字符
+
+
+2、JavaScript的Array对象
+	(1) 构造数组:
+		- var arr1 = [1,2,3];
+		- var arr2 = new Array(3);
+		- var arr3 = new Array(1, 2, 3);
+
+	(2)属性:
+		length: 数组的长度
+
+	(3)方法:
+		- concat: 连接数组
+
+		- join(): 根据制定的字符分割数组
+		
+		- push(): 向数组末尾添加元素，返回新的长度
+
+		- pop(): 删除最后一个元素，返回删除的那个元素
+
+		- reverse(): 翻转数组中元素的顺序
+
+
+3、 JavaScript的Date对象
+	(1) 构造Date
+		// 获取当前时间
+		var date = new new Date(year: int, month: int, date?: int, hours?: int, minutes?: int, seconds?: int, ms?: int)
+
+	(2) 属性:
+
+	(3) 方法:
+		- toLocaleString(): 转换成习惯的格式
+
+		- getFullYear(): 获取当前年
+
+		- getMonth(): 获取当前月方法
+
+		- getDay(): 获取当前的星期，返回的是(0-6)
+
+		- getDate(): 获取当天(1-31) 
+
+		- getHours(): 获取当前的小时
+
+		- getMinutes(): 获取当前分钟
+
+		- getSeconds(): 获取当前秒
+
+		- getTime(): 返回1970年1月1日至今的毫秒数
+			-- 应用场景:
+				使用毫秒数来处理缓存的效果(不有缓存)
+					http://www.baidu.com?毫秒数
+
+
+4、JavaScript的Math对象
+	(1)都是静态方法，直接使用Math.方法()
+
+	(2) 方法:
+		- cell(x):	向上舍入
+
+		- floor(x):	向下舍入
+
+		- round(x): 四舍五入
+
+		- random(): 得到随机数:伪随机数(0.0-1.0)之间
+
+		- max(x,y):	返回最大值
+
+		- min(x,y): 返回最小值
+
+		- power(x,y): 返回x的y次幂
+
+	(3)属性:
+		- PI
+		- E
+		- SQRT2
+
+
+5、JavaScript的全局函数
+	(1) 不属于任何一个对象，直接写名称使用
+
+	(2) 函数:
+		-eval(); 执行js代码(如果字符串是一个js代码，使用方法直接执行)
+		// eval
+		var str = "alert('1234')";
+		eval(str);
+
+		- encodeURI(): 对字符进行编码
+			// encodeURI
+			document.write("<hr/>");
+			var str1 = "测试中文aaa123";
+			document.write(encodeURI(str1));
+		- decodeURI(): 对字符进行解码
+
+		- encodeURIComponent(): 把字符串编码为URI组件
+
+		- decodeURIComponent():	解码一个编码的URI组件
+
+		- isNaN(): 判断当前字符串是否为数字，不是数字为true，是数字false
+
+		- parseInt(): 类型转换为整数
+
+
+6、JavaScript函数的重载
+	(1)方法名相同，参数名不同
+
+	(2)JavaScript里面不存在重载
+		- 但是可以通过其他方式模拟重载
+		- 把传递的参数保存到argument数组里面
+		- 调用最近的一个方法
+
+
+7、JavaScript的bom对象
+	(1) bom: broswer object model: 浏览器对象模型
+
+	(2) 对象:
+		- navigator: 获取客户机的信息(浏览器的信息)
+			代码:
+				navigator.appName
+				document.write(navigator.appName);
+
+		- screen: 获取屏幕的信息
+			代码:
+				document.write("<hr/>");
+				document.write(screen.width);
+				document.write("<br/>");
+				document.write(screen.height);
+
+		- location: 请求url地址
+			-- href 属性: 
+				--- 获取到请求的url地址
+				document.write(decodeURI(location.href));
+
+				--- 设置url地址
+					如: 页面上安置一个按钮，按钮上绑定一个事件，当点击这个按钮时，页面可以跳转到另外一个页面。
+
+			代码:
+				<input type="button" value="jump" onclick="href1();"/>
+				// href
+				function href1() {
+					location.href = "http://www.baidu.com";
+				}
+
+		- history: 请求的url的历史记录
+			- 需求: 创建三个页面:
+				1. 创建第一个页面 a.html 写一个超链接 到 b.html
+				2. 创建 b.html 超链接 到 c.html
+				3. 创建 c.html
+
+			- 到访问的上一个页面
+				history.back();
+				history.go(-1);
+
+			- 到访问的下一个页面
+				history.back();
+				history.go(1);
+
+		- window: 窗口对象，JavaScript 层级中的顶层对象(所有的bom对象都是在window里面操作的)
+			- 属性:
+				window.opener:得到创建创建某窗口的父窗口
+				var pwin = window.opener;
+
+			- 方法:
+				-- window.alert() 简写 alert() : 页面弹出一个框显示内容
+
+
+				-- confirm("text") 确认提示框。
+				返回 ture、false
+				代码:
+				<script type="text/javascript">
+					// 演示confirm 方法
+					window.confirm("是否删除?");
+				</script> 
+
+
+				-- prompt("text", "defaultText"): 输入对话框
+
+				-- open(URL, name, features(窗口特征), replace): 打开一个新的浏览器窗口
+				代码:
+					在页面上创建一个按钮，点击这个按钮，打开一个新的窗口：
+				function open1() {
+					window.open("http://www.baidu.com","", "width=200,height =100");
+				}
+
+
+				-- close(): 关闭这个窗口(浏览器兼容性比较差)
+
+
+				做定时器的方法:
+				-- setInterval("func", ms, argument...): 
+					指定的周期(以ms计)来调用函数或表达式
+					返回id值
+				代码:
+				window.setInterval("alert('123')", 3000);
+
+
+				-- setTimeout("func", ms, argument...)
+					在指定的毫秒数之后调用函数或表达式，执行一次
+					返回id值
+				代码
+				window.setTimeout("alert('abc')", 4000);
+
+
+				-- clearInterval(id_of_setInterval): 
+					清除setInterval设置的定时器
+
+
+				-- clearTimeout(id_of_setTimeout): 
+					清除setTimeout设置的定时器
+
+8、JavaScript的dom对象
+	(1) dom: document object model: 文档对象模型
+		- 文档:
+			超文本文档(超文本标记文档) html、xml
+		- 对象:
+			提供了属性和方法
+		- 模型:
+			使用属性和方法操作超文本标记文档
+
+		- 可以使用js里面的dom里面提供的对象，使用这些对象的属性和方法，对标记型文档进行操作。
+
+		- 想要对标记型文档进行操作，首先需要 对标记型文档里面的内容封装成文档
+			-- 需要把html里面的标签、属性、文本内容都封装成对象
+			-- 要想对标记型文档进行操作，解析标记型文档
+
+			-- 解析过程：
+				根据html的层级结构，在内存中分配一个树形结构，需要把html中的每个部分封装成对象:
+				- document对象
+				- element对象
+				- 属性对象
+				- 文本对象
+				- Node节点对象：
+					子对象的父对象
+					如果在对象里面找不到想要的方法，这时候到node对象里面找
+
+
+DHTML是很多技术的简称:
+	html: 封装数据
+	css: 使用属性和属性值设置样式
+	dom: 操作html文档(标记型文档)
+	javascript: ECMAScript
+
+
+9、 document对象
+	(1)表示整个文档
+
+	(2)常用方法:
+		- write() 方法:
+			-- 向页面输出变量(值) 
+			-- 向页面输出html代码
+
+
+		- getElementById(tag_id_property):
+			-- 通过id得到元素(标签)
+			-- 返回一个对象
+			代码:
+			var input1 = document.getElementById("nameid");
+			alert(input1.value);
+
+
+		- getElementsByName(tag_name_property):
+			-- 通过标签的name属性得到标签
+			-- 返回的是对象的集合
+		代码:
+		var arr = document.getElementsByName("name1");
+		alert(arr.length);
+
+
+		- getElementsByTagName(tag_name):
+			-- 返回带有指定签名的对象集合
+		代码:
+    	var input1 = document.getElementsByTagName("input");
+    	alert(input1.length);
+
+
+10、案例 window弹窗案例
+	(1)创建一个页面:
+		- 有两个输入项和一个按钮
+		- 按钮上面有一个事件：弹出一个新窗口open
+
+	(2) 创建弹出页面
+		- 表格
+		- 每一个有一个按钮、编号和姓名
+		- 按钮上有一个事件，把当前行的编号和姓名赋值到第一个页面相应的位置
+
+	(3)有一个问题:
+		由于现在访问的是本地文件，由于JavaScript安全性，谷歌浏览器安全级别很高，不允许访问本地文件

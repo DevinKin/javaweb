@@ -1,0 +1,278 @@
+1、 css简介
+	(1)层叠样式表
+		- 层叠：一层一层的
+
+		- 样式表：有很多的属性和属性值
+
+		- css将网页内容和显示样式进行分离，提高了显示功能
+
+2、 css和html的结合方式(4种)：
+	(1)在每个html标签上面都有一个属性 style,把css和html结合在一起。
+		代码：
+	<div style="background-color: red; color: green">苟利国家生死以，岂因祸福避趋之。</div>
+
+	(2)使用html和一个标签实现<style>标签，写在head里面
+		代码:
+			- <style type="text/css">
+				css代码;
+			  	<style type="text/css">
+				div {
+					background-color: red;	
+					color: blue;
+				}
+				</style>
+
+	(3)在style标签里面，使用语句(缺点：某些浏览器下不起作用)
+		-第一步：创建一个css文件
+
+		@import url(css文件的路径)
+		代码：
+			<style type="text/css">
+				@import url(div.css);
+			</style>
+
+	(4)使用头标签link,引入外部css文件(常用方式)
+		-第一步：创建一个css文件
+
+		代码
+		<link rel="stylesheet" type="text/css" href="div.css">
+
+3、css的优先级(一般情况)
+	(1)由上到下，由外到内，优先级从低到高。
+
+	(2)后加载的优先级高
+
+	(3)格式： 选择器名称{ 属性名: 属性值; 属性名: 属性值;}
+
+
+4、CSS的基本选择器(三种)
+	- 要对哪个标签里面的数据进行操作
+	(1)标签选择器
+		-- 使用标签名作为选择器的名称
+			div {
+
+			}
+
+	(2) class 选择器(.)
+
+		-- 每个html标签都有一个属性 class
+		-	<style type="text/css">
+				div.haha {
+					background-color: yellow;
+				}
+			</style>
+			<div class="haha">苟利国家生死以，岂因祸福避趋之</div>
+
+		-	.haha {
+				background-color: orange;
+			}
+			<div class="haha">苟利国家生死以，岂因祸福避趋之</div>
+			<p class="haha"> 苟利国家生死以</p>
+
+	(3) id 选择器(#)
+
+		- 每个html标签里面都有一个属性 id
+			--	<style type="text/css">
+					div#hehe {
+						background-color: gray;
+					}
+					p#hehe {
+						background-color: gray;
+					}
+				</style>
+				<div id="hehe">苟利国家生死以，岂因祸福避趋之</div>
+				<p id="hehe">苟利国家生死以</p>
+
+			--	<style type="text/css">
+					#hehe {
+						background-color: gray;
+					}
+				</style>
+				<div id="hehe">苟利国家生死以，岂因祸福避趋之</div>
+				<p id="hehe">苟利国家生死以</p>
+
+5、css的扩展选择器
+
+	(1)关联选择器
+
+		- <div><p>wwwwwwwwwwwww</p></div>
+		- 设置div标签里面p标签的样式，嵌套标签里面的样式
+
+		-	<style type="text/css">
+				div p {
+					background-color: red;
+				}
+			</style>
+			div><p>CSS的扩展选择器</p></div>
+			<p>wwwwwwwwwwwwwwwwwwwww</p>
+
+	(2)组合选择器
+		- <div>1111</div>
+		  <p>22222</p>
+
+		- 把div和p标签设置成相同的样式，把不同的标签设置成相同的样式
+		-	<style type="text/css">
+				div,p {
+					background-color: red;
+				}
+			</style>
+			<div>QQQQQQQQQQQQQQQQQQ</div>
+			<p>aaaaaaaaaaaaaaaaaaaa</p>
+
+	(3)伪元素选择器
+		- css里面提供了一些定义好的样式。可以直接使用。
+		- 如使用超链接
+			-- 超链接的状态
+				原始状态		:link
+				鼠标悬停状态	:hover 
+				点击 		:active
+				点击之后		:visited
+		-	<style type="text/css">
+				/*原始状态*/
+				a:link {
+					background-color: red;
+				}
+				/*悬停状态*/
+				a:hover {
+					background-color: green;
+				}
+				/*点击状态*/
+				a:active {
+					background-color: blue;
+				}
+				/*点击之后状态*/
+				a:visited {
+					background-color: grey;
+				}
+			</style>
+			<a href="http://www.baidu.com/" target="_blank">百度一下</a>
+
+6、css的盒子模型
+	- 在进行布局之前需要把数据封装到一块一块的区域内，这个区域叫盒子。
+		(div)
+
+	(1)边框	border:统一设置
+		分别设置：
+		-上 border-top
+		-下 border-bottom
+		-左 border-left
+		-右 border-right
+
+		- 代码：
+			<style type="text/css">
+				div {
+					width: 200px;
+					height: 100px;
+
+					border: 2px solid blue;
+				}
+
+				div#div12 {
+					border-right: 2px dashed yellow;
+				}
+			</style>
+			<div id="div11">AAAAAAAAAAAA</div>
+			<div id="div12">BBBBBBBBBBBB</div>
+			<div id="div13">CCCCCCCCCCCC</div>
+
+	(2)内边距 padding:统一设置
+		分别设置：
+		-上: padding-top
+		-下: padding-bottom
+		-左: padding-left
+		-右: padding-right
+
+		代码: 
+		-	#div12 {
+				padding: 20px;
+			}
+
+			#div13 {
+				padding-left: 30px;
+			}
+
+	(3)外边距 margin:统一设置
+		分别设置:
+		-上: margin-top
+		-下: margin-bottom
+		-左: margin-left
+		-右: margin-right
+
+		代码：
+		#div12 {
+			margin: 20px;
+		}
+		#div13 {
+			margin-left: 30px;
+		}
+
+7、css布局的漂浮
+	- float
+		--属性值:
+
+			left: 文本流向对象的右边
+			right: 文本流向对象的左边
+		- 代码：
+		#div11 {
+			float: left;
+		}
+		#div12 {
+			float: left;
+		}
+
+8、css布局定位属性
+
+	(1)position:
+		-属性值:
+			static: 默认值
+			-absolute: 将对象从文档流中拖出，对象可重叠，使用left、top、right、bottom属性进行绝对定位。
+				#div11 {
+					background-color: red;
+					position: absolute;
+					top: 80px;
+					left: 120px;
+				}
+
+			-relative: 不会将对象从文档流拖出。对象不可层叠，使用left、top、right、bottom属性进行绝对定位。
+				#div11 {
+					background-color: red;
+					position: relative;
+
+					top: 80px;
+					left: 120px;
+
+				}
+
+9、案例图文混排案例:
+	图片和文字放在一起:
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML实例</title>
+	<style type="text/css">
+		#imgtext1 {
+			width: 400px;
+			height: 600px;
+
+			border: 2px	dashed orange;
+		}
+		#img1 {
+			float: right;
+		}
+		#text1 {
+			color: green;
+		}
+	</style>
+</head>
+<body>
+	<div id="imgtext1">
+		<div id="img1"><img src="bl201.jpg"></div>
+		<div id="text1">苟利国家生死以，岂因祸福避趋之苟利国家生死以，岂因祸福避趋之苟利国家生死以，岂因祸福避趋之苟利国家生死以，岂因祸福避趋之苟利国家生死以，岂因祸福避趋之苟利国家生死以，岂因祸福避趋之苟利国家生死以，岂因祸福避趋之苟利国家生死以，岂因祸福避趋之苟利国家生死以，岂因祸福避趋之</div>
+	</div>
+</body>
+</html>
+
+
+10、案例： 图像签名
+	- 在图片上显示文字
+

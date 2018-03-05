@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>HTML实例</title>
+	<style type="text/css">
+		
+	</style>
+</head>
+<body>
+	行: <input type="text" id="row"/>
+	列: <input type="text" id="col"/>
+	<br/>
+	<input type="button" value="生成" id="create" onclick="create();"><br/>
+	<div id="div1"></div> 
+</body>
+	<script type="text/javascript">
+		function create () {
+			var row = document.getElementById("row");
+			var col = document.getElementById("col");
+
+			var tableNode = document.getElementById("table1");
+			if (tableNode != null)
+				div1.removeChild(tableNode);
+			// 创建行
+			var table = document.createElement("table");
+			table.border = '1';
+			table.id = "table1";
+			for (var r = 0; r < row.value; r++)
+			{
+				var tr = table.insertRow();
+				table.appendChild(tr);
+				for (var l = 0; l < col.value; ++l)
+				{
+					var td = tr.insertCell();
+					td.innerHTML = "单元格";
+				}
+			}
+			document.getElementById("div1").appendChild(table);
+		}
+
+		function create1 () {
+			var row = document.getElementById("row");
+			var col = document.getElementById("col");
+			var div1 = document.getElementById("div1");
+			var tableNode = document.getElementById("table1");
+			if (tableNode != null)
+				div1.removeChild(tableNode);
+			var table = "<table border = '1' id='table1'>";
+			for (var r = 0; r < row.value; r++)
+			{
+				table += "<tr>";
+				for (var l = 0; l < col.value; l++)
+				{
+					table += "<td>";
+					table += "test";
+					table += "</td>";
+				}
+				table += "</tr>";
+			}
+
+			div1.innerHTML = table;
+		}
+		
+	</script>
+</html>

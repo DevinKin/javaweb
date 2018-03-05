@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>HTML实例</title>
+	<style type="text/css">
+		
+	</style>
+</head>
+<body>
+	<select id="country" onchange="change(this.value);">
+		<option>---请选择---</option>
+		<option value="中国">中国</option>
+		<option value="美国">美国</option>
+		<option value="德国">德国</option>
+		<option value="日本">日本</option>
+	</select>
+
+	<select id="city">
+	</select>
+</body>
+	<script type="text/javascript">
+		function change (val) {
+			 var arr = new Array(4);
+			 arr[0] = ["中国","南京","福州","临洮", "哈密"];
+			 arr[1] = ["美国", "华盛顿", "休斯顿", "纽约","底特津"];
+			 arr[2] = ["德国","慕尼黑","柏林","法兰克福","狼堡"];
+			 arr[3] = ["日本","东京","北海道","大阪","长岛","长崎"];
+			 var city = document.getElementById("city");
+			 var cops = city.getElementsByTagName("option");
+
+			 for (var c = 0; c < cops.length; c++)
+			 {
+			 	var op = cops[c];
+			 	city.removeChild(op);
+			 	c--;
+			 }
+			 
+			 for (var i = 0; i < arr.length; i++)
+			 {
+			 	var country = arr[i][0];
+			 	if (country == val)
+			 	{
+
+			 		for (var j = 1; j < arr[i].length; j++)
+			 		{
+			 			var op = document.createElement("option");
+			 			var text = document.createTextNode(arr[i][j]);
+			 			op.appendChild(text);
+			 			city.appendChild(op);
+			 		}
+			 	}
+			 }
+		}
+	</script>
+</html>

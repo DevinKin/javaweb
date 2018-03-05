@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML实例</title>
+</head>
+<body>
+	<script type="text/javascript">
+		var add = function(m, n) {
+			alert(m + n);
+		}
+		add(3, 4);
+
+		// 第三种方式
+		var add2 = new Function("x, y", "var sum=x+y;return sum;");
+		alert(add2(7,4));
+
+	</script>
+</body>
+</html>

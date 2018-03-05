@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <servlet>
+        <servlet-name>XXX</servlet-name>
+        <servlet-class>cn.itcast.servlet.AServlet</servlet-class>
+        <init-param>
+            <param-name>p1</param-name>
+            <param-value>v1</param-value>
+        </init-param>
+        <init-param>
+            <param-name>p2</param-name>
+            <param-value>v2</param-value>
+        </init-param>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>XXX</servlet-name>
+        <url-pattern>/AServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>YYY</servlet-name>
+        <servlet-class>cn.itcast.servlet.EServlet</servlet-class>
+        <init-param>
+            <param-name>p1</param-name>
+            <param-value>v1</param-value>
+        </init-param>
+        <init-param>
+            <param-name>p2</param-name>
+            <param-value>v2</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>YYY</servlet-name>
+        <url-pattern>/EServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ZZZ</servlet-name>
+        <servlet-class>cn.itcast.servlet.FServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ZZZ</servlet-name>
+        <url-pattern>/FServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DDD</servlet-name>
+        <servlet-class>cn.itcast.servlet.GServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>DDD</servlet-name>
+        <url-pattern>/GServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EEE</servlet-name>
+        <servlet-class>cn.itcast.servlet.HServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>EEE</servlet-name>
+        <url-pattern>/HServlet</url-pattern>
+    </servlet-mapping>
+
+    <context-param>
+        <param-name>context-param</param-name>
+        <param-value>context-value</param-value>
+    </context-param>
+
+
+    <servlet>
+        <servlet-name>III</servlet-name>
+        <servlet-class>cn.itcast.servlet.IServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>III</servlet-name>
+        <url-pattern>/IServlet</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>JJJ</servlet-name>
+        <servlet-class>cn.itcast.servlet.JServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>JJJ</servlet-name>
+        <url-pattern>/JServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>KKK</servlet-name>
+        <servlet-class>cn.itcast.servlet.KServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>KKK</servlet-name>
+        <url-pattern>/KServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LLL</servlet-name>
+        <servlet-class>cn.itcast.servlet.LServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LLL</servlet-name>
+        <url-pattern>/LServlet</url-pattern>
+    </servlet-mapping>
+</web-app>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>HTML实例</title>
+</head>
+
+<body>
+    <input type="text" name="name1" value="aaaa" />
+    <br/>
+    <input type="text" name="name1" value="bbbb" />
+    <br/>
+    <input type="text" name="name1" value="cccc" />
+    <br/>
+    <input type="text" name="name1" value="dddd" />
+    <br/>
+    <script type="text/javascript">
+    // getElementByName
+    var arr = document.getElementsByName("name1");
+    //		alert(arr.length);
+    for(var i = 0; i < arr.length; i++)
+    {
+    	var val = arr[i].value;
+    	alert(val);
+    }
+    </script>
+</body>
+
+</html>

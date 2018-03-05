@@ -1,0 +1,198 @@
+一、JDBC入门
+
+1、JDBC -> Java DataBase Connectivity
+
+2、步骤：
+	(1)导入jar包：驱动！
+
+	(2)加载驱动类：Class.forName("类名");
+
+	(3)给出url、username、password，其中url背下来
+
+	(4)使用DriverManager类来得到Connection对象！
+
+3、例：
+    @Test
+    public void func1() throws ClassNotFoundException, SQLException {
+        /**
+         * jdbc四大配置参数：
+         * driverClassName: com.mysql.jdbc.Driver
+         * url: jdbc:mysql://localhost:3306/mydb3
+         * username:
+         * password:
+         */
+        Class.forName("com.mysql.jdbc.Driver");
+        String url = "jdbc:mysql://localhost:3306/mydb3";
+        String username = "root";
+        String password = "kingoliver2398";
+
+        //使用url,username,password,得到连接对象
+        Connection con = DriverManager.getConnection(url,username,password);
+        System.out.println(con);
+    }
+
+4、所有的java.sql.Driver实现类，都提供了static块，块内的代码就是把自己注册到DriverManager中！
+
+5、jdbc4.0之后，每个驱动jar包中，在META-INF/services目录下提供了一个名为java.sql.Driver的文件，文件的内容就是该接口的实现类名称！
+
+
+二、JDBC完成增、删、改、查操作
+
+1、各个厂商数据库驱动名以及url
+#mysql
+#url=jdbc:mysql://localhost:3306/mydb?useUnicode=true&characterEncoding=utf8&useServerPrepStmts=true&cachePrepStmts=true&prepStmtCacheSize=50&prepStmtCacheSqlLimit=300
+#driverClassName=com.mysql.jdbc.Driver
+
+#mssql
+#driverClassName=com.microsoft.jdbc.sqlserver.SQLServerDriver
+#url=jdbc:sqlserver://127.0.0.1:1433;DatabaseName=mydb
+
+#mssql jtds
+#driverClassName=net.sourceforge.jtds.jdbc.Driver
+#url=jdbc:jtds:sqlserver://127.0.0.1:1433;DatabaseName=mydb
+
+#orcale
+#driverClassName=oracle.jdbc.driver.OracleDriver
+#url=jdbc:oracle:thin:@localhost:1521:mydb
+
+#access
+#driverClassName=sun.jdbc.odbc.JdbcOdbcDriver
+#url=jdbc:odbc:driver={Microsoft Access Driver (*.mdb)};DBQ=mdb\\mydb.mdb
+
+
+2、得到Statement对象发送sql语句
+	(1)Statement statement = connection.createStatement(int,int);
+
+	(2)两个int参数用来确定statement能生成什么样的结果集
+
+3、调用statement的方法进行增删改
+	(1)int executeUpdate() 方法
+		ddl:create,alter,drop,insert,update,delete
+
+	(2)ResultSet executeQuery() 方法
+		select
+
+	(3)boolean execute() 方法，表示SQL语句是否有结果集
+		- 可以执行executeUpdate()和executeQuery()
+
+		- 不过需要配套使用其他方法
+			int getUpdateCount()
+			ResultSet getResultSet()
+
+4、增删改后释放资源
+	(1)rs.close();
+        
+    (2)statement.close();
+
+    (3)connection.close();         // 必须要关
+
+
+
+三、JDBC之代码规范化
+
+1、规范
+	(1)在try外给出引用的定义
+
+	(2)在try内为对象实例化
+
+	(3)在finally中进行关闭
+
+2、例：
+   public void func3() throws ClassNotFoundException, SQLException {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            String DriverClassName = "com.mysql.jdbc.Driver";
+            String url = "jdbc:mysql://localhost:3306/eaxm";
+            String username = "root";
+            String password = "123";
+            Class.forName(DriverClassName);
+
+            connection = DriverManager.getConnection(url,username,password) ;
+
+            statement = connection.createStatement();
+
+            String sql = "SELECT * FROM emp";
+            resultSet = statement.executeQuery(sql);
+
+            /**
+             * getString()和getObject()是通用的
+             */
+            while (resultSet.next()) {
+                System.out.println(resultSet.getObject(1) + ", "
+                        + resultSet.getString("ename") + ", "
+                        + resultSet.getDouble("sal"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } finally {
+            if(resultSet != null) resultSet.close();
+            if(statement != null) statement.close();
+            if(connection != null) connection.close();
+        }
+
+
+
+四、Result之滚动结果集
+
+1、操作：
+	(1) 下一行：默认只能使用它，其他方法存在，但不能使用！默认的结果集不能滚动！
+		上一行：
+		下N行：
+		上N行：
+		到N行：
+
+
+2、方法:
+	void beforeFirst();
+	void afterLast();
+	boolean first();
+	boolean last();
+	boolean isBeforeFirst();
+	boolean isAfterLast();
+	boolean isFirst();
+	boolean isLast();
+	boolean relative(int row);
+	boolean absolute(int row);
+	int getRow();
+	ResultSetMetaData getMetaData();	// 获取结果集元数据
+		- ResultSetMetaData的方法
+			int getColumnCount();
+			String getColumnName(int columnIndex);
+
+
+3、结果集特性
+	(1)当使用Connection的createStatement时，已经确定了Statement生成的结果集是什么
+		Statement createStatement(int resultSetType, int resultSetConcurrency);
+	(2)是否可滚动
+
+	(3)是否敏感
+
+	(4)是否可更新
+
+	(5)resultSetType的可选值：
+		- ResultSet.TYPE_FORWARD_ONLY：不可滚动结果集
+		- ResultSet.TYPE_SCROLL_INSENSITIVE：滚动结果集，但结果集数据不会再跟随数据库而变化
+		- ResultSet.TYPE_SCROLL_SENSITIVE：滚动结果集，但结果集数据会再跟随数据库而变化，没有数据库驱动支持它
+
+	(6)resultSetConcurrency的可选值
+		- CONCUR_READ_ONLY：结果集只读的，不能通过修改结果集而反向影响数据库
+		- CONCUR_UPDATABLE：结果集可更新的，对结果集的更新可以反向影响数据库
+
+
+
+五、PreparedStatement
+	
+1、它是Statement接口的子接口
+
+2、强大之处：
+	(1)防止SQL攻击
+
+	(2)提高代码的可读性、可维护性
+
+	(3)提高效率
+
+3、PreparedStatement的用法

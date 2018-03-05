@@ -1,0 +1,528 @@
+1、schema约束
+	(1)dtd语法: <!ELEMENT 元素 约束>
+
+	(2)schema符合xml语法，xml语句
+
+	(3)一个xml中可以有多个schema，多个schema使用名称空间进行区分(类似与java的包名)
+
+	(4)dtd里面有PCDATA类型，但是在schema里面可以支持更多的数据类型
+
+	(5)schema语法更加复杂，schema目前不能替代dtd
+
+
+2、schema的快速入门
+
+	(1)创建schema文件，自身就是xml文件，不过后缀名为(.xsd)
+		- 根节点为 <schema>
+			-- 属性:
+				xmlns="http://www.w3.org/2001/XMLSchema"
+				表示当前xml文件是一个约束文件
+
+				targetNamespace="http://www.itcast.cn/20151111"
+				使用schema约束文件，直接通过这个地址来引入约束文件
+
+				elementFormDefault="qualified"
+
+
+		- 步骤:
+			a. 看xml中有多少个元素，就写多少个<element>
+
+			b. 看简单元素还是复杂元素，复杂元素里面添加<complexType>
+			
+			c. 简单元素写在复杂元素<sequence>里面
+
+			例：
+			    <element name="person">
+			        <complexType>
+			            <sequence>
+			                <element name="name" type="string"></element>
+			                <element name="age" type="int"></element>
+			            </sequence>
+			        </complexType>
+			    </element>
+
+			d. 在被约束文件里面引入约束文件，在根节点里面引入
+				属性:
+					xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+						--表示的是一个被约束文件,xsi为别名，避免属性重复
+
+					xmlns="http://www.itcast.cn/20151111"
+						-- 是约束文档里面的targetNamespace
+
+					xsi:schemaLocation="http://www.itcast.cn/20151111 1.xsd"
+						-- targetNamespace 空格 约束文档的路径
+
+				代码:
+
+				<person xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+				        xmlns="http://www.itcast.cn/20151111"
+				xsi:schemaLocation="http://www.itcast.cn/20151111 1.xsd">
+
+3、xmlSchema负咋元素指示器
+	(1)<sequence>: 表示元素按照顺序出现
+
+	(2)<all></all>: 表示元素只能出现一次
+
+	(3)<choice></choice>: 表示元素出现任意一个
+
+	(4)<maxoccurs>="unbounded": 表现元素出现的次数
+	代码:
+	<element name="name" type="string" maxOccurs="unbounded"></element>
+
+	(5)<any></any>:表示任意元素
+
+
+4、schema可以约束属性
+	(1)要求:
+		- 写在复杂元素里面
+		- 写在</complexType>之前
+
+		- <attribute name="id1" type="int" use="required"></attribute>
+			- name: 属性名称
+			- type: 属性类型: int、string...
+			- use: 属性是否必须出现 required
+
+
+5、Schema入门案例:
+	(1)引入多个schema，可以分别给每个schema起一个别名
+	(2)复杂schema
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- 数据文件引用多个Schema -->
+<company xmlns="http://www.example.org/company"
+        xmlns:dept="http://www.example.org/department"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.example.org/company company.xsd http://www.example.org/department department.xsd">
+    <employee>
+        <!-- 部门名称 -->
+        <dept:name>100</dept:name>
+        <name>王晓晓</name>
+    </employee>
+</company>
+
+
+6、sax解析的原理
+	(1)解析xml有两种技术 dom 和 sax
+
+	(2)dom: 根据xml的层级结构在内存中分配一个树型结构,把xml中标签，树型，文本封装成对象
+
+	(4)sax方式: 事件驱动，边读边解析
+
+	(5)在javax.xml.parsers包里面
+		- SAParser: 抽象类
+			通过 SAXPaserFactory.newSAXParser()方法获得该类的实例
+			- parse(File f, DefaultHandler dh)
+				-- 两个参数
+				-- 第一个参数: xml路径
+				-- 第二个参数: 事件处理器
+
+		- SAXParserFactory: 抽象类
+			实例通过newInstance()方法得到
+
+	(6) 画图分析一下sax执行过程(DefaultHandler执行流程)
+		- 当解析到开始标签时候，自动执行startElement方法，参数qName返回标签名称
+		- 当解析到文本内容时候，自动执行characters方法，通过string的构造方法返回内容
+		- 当解析到结束标签时候，自动执行endElement方法，参数qName返回标签名称
+
+
+8、使用jaxp的sax方式解析xml
+	(1) sax方式不能实现增删改操作，只能做查询操作
+
+	(2) 需求: 打印出整个文档
+public class TestSax {
+    public static void main(String[] args) throws Exception
+    {
+        /**
+         * 1. 创建解析器工厂
+         * 2. 创建解析器
+         * 3. 执行parse方法
+         *
+         * 4. 自己创建一个类，这个类集成DefaultHandler
+         * 5. 重写类里面的三个方法
+         */
+
+        // 创建解析器工厂
+        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+
+        // 创建解析器
+        SAXParser saxParser = saxParserFactory.newSAXParser();
+
+        // 执行parse方法
+        saxParser.parse("src/p1.xml", new MyDefault1());
+    }
+}
+
+class MyDefault1 extends DefaultHandler
+{
+    @Override
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        super.startElement(uri, localName, qName, attributes);
+        System.out.print("<" + qName + ">");
+    }
+
+    @Override
+    public void characters(char[] ch, int start, int length) throws SAXException {
+        super.characters(ch, start, length);
+        System.out.print(new String(ch, start, length));
+    }
+
+    @Override
+    public void endElement(String uri, String localName, String qName) throws SAXException {
+        super.endElement(uri, localName, qName);
+        System.out.print("<" + qName + ">");
+    }
+}
+
+	(3) 获取到所有name元素的值
+
+	(4) 获取第一个name元素的值
+
+
+9、使用dom4j解析xml
+
+	(1)dom4j，是一个组织，针对xml解析，提供解析器dom4j
+
+	(2)dom4j不是javase的一部分，想要使用第一步需要
+		- 导入dom4j提供jar包
+
+		- 导入方法: 工程下创建一个文件夹lib
+
+		- 右键复制jar包到lib下面
+
+		- File – Project Structure
+
+		- 选择Moudules – 再选择Dependencies
+		- 选中Moudule source – 然后点击+号
+		- 在目录中找到自己要添加的jar包“OK”即可。
+
+
+	(3)得到document 
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(url);	
+
+	(4)document的父接口是Node
+		如果在document里面找不到想要的方法，到Node里面找
+
+	(5)Document.getRootElement()获取根节点，返回Element
+
+	(6)Element也是一个接口，其父接口也是Node
+		- addElement(): 添加标签
+
+	(7)Node里面的方法:
+		- getparent(): 获取父节点
+
+
+10、使用dom4j查询xml
+	(1)查询所有name元素里面的值
+		1. 创建解析器
+		2. 得到document
+		3. 得到根节点 getRootElement()
+		4. 得到所有p1标签
+			- element(qname)
+				-- 表示获取标签下面的第一个子标签
+				-- qname: 标签的名称
+
+			- elements(qname)
+				-- 获取标签下面的子标签(一层)
+
+			- elements()
+				-- 获取下面的所有一层子标签
+		5. 得到name
+		6. 得到name里面的值
+
+public class TestDom4j {
+    public static void main(String[] args) throws Exception {
+        selectName();
+    }
+
+    // 查询xml中所有name元素的值
+    public static void selectName() throws Exception{
+        /**
+         * 1.创建解析器
+         * 2.得到document
+         * 3.得到根节点
+         *
+         * 4.得到p1
+         * 5.得到p1下面的name
+         * 6.得到name里面的值
+         */
+        SAXReader saxReader = new SAXReader();
+
+        Document document = saxReader.read("src/p1.xml");
+
+        Element root = document.getRootElement();
+
+        List<Element> list = root.elements("p1");
+        for (Element element : list)
+        {
+            Element name1 = element.element("name");
+            System.out.println(name1.getText());
+        }
+    }
+}
+
+
+11、使用dom4j实现添加操作
+	(1)在p1末尾加上<sex></sex>元素
+	public static void addSex() throws Exception {
+        /**
+         * 1. 创建解析器
+         * 2. 得到document
+         * 3. 得到根节点
+         *
+         * 4. 获取到第一个p1
+         * 5. p1下面添加元素
+         * 6. 在添加完成之后的元素添加文本
+         *
+         * 7. 回写xml
+         */
+        SAXReader saxReader = new SAXReader();
+
+        Document document = saxReader.read("src/p1.xml");
+
+        Element element = document.getRootElement();
+
+        Element p1 = element.element("p1");
+
+        p1.addElement("sex").addText("girl");
+
+        XMLWriter xmlWriter = new XMLWriter(new FileOutputStream("src/p1.xml"), OutputFormat.createPrettyPrint()); // 可以有缩进的效果
+        xmlWriter.write(document);
+        xmlWriter.close();
+    }
+
+
+8、在特定的位置添加元素
+	(1)在第一个p1下面的age之前添加<school>dongxiuxiaoxue.cn<school>
+
+	DocumentHelper的使用
+
+    // 在第一个p1下面age标签之前添加school标签
+    public static void addSchool() throws Exception {
+        SAXReader saxReader = new SAXReader();
+        Document document = saxReader.read("src/p1.xml");
+
+        Element root = document.getRootElement();
+
+        Element p1 = root.element("p1");
+
+        List<Element> list = p1.elements();
+        Element school = DocumentHelper.createElement("school");
+        school.setText("dongxiu.cn");
+        list.add(1, school);
+
+        XMLWriter xmlWriter = new XMLWriter(new FileOutputStream("src/p1.xml"), OutputFormat.createPrettyPrint());
+        xmlWriter.write(document);
+        xmlWriter.close();
+    }
+
+
+	(2)可以对得到document的操作和回写xml的操作，封装成方法
+
+	(3)可以把传递的文件路径，封装成一个常量
+
+	(4)好处:可以提高开发速度，也可以提高代码的可维护性
+
+
+9、使用dom4j修改元素操作
+	(1)修改第一个p1下面的age的元素的值为30
+	public static void modifyAge() throws Exception {
+        Document document = Dom4jUtils.getDocument(Dom4jUtils.PATH);
+
+        Element root = document.getRootElement();
+
+        Element p1 = root.element("p1");
+
+        Element age = p1.element("age");
+        age.setText("30");
+        Dom4jUtils.xmlWriters(Dom4jUtils.PATH, document);
+    }
+
+
+10、使用dom4j实现删除节点操作
+	(1)把第一个p1下面的<school></school>元素删除
+    public static void delSchool() throws Exception {
+        Document document = Dom4jUtils.getDocument(Dom4jUtils.PATH);
+        Element root = document.getRootElement();
+
+        Element p1 = root.element("p1");
+        Element school = p1.element("school");
+        p1.remove(school);
+
+        Dom4jUtils.xmlWriters(Dom4jUtils.PATH, document);
+    }
+
+
+11、使用dom4j获得属性的操作
+	(1)获取第一个p1里面的属性id1的值
+
+    public static void getValues() throws Exception {
+        Document document = Dom4jUtils.getDocument(Dom4jUtils.PATH);
+        Element root = document.getRootElement();
+
+        Element p1 = root.element("p1");
+        //System.out.println(p1.attribute("id1").getText());
+        System.out.println(p1.attributeValue("id1"));
+    }
+
+
+12、使用dom4j支持xpath的操作 
+	(1)可以直接获取到某个元素
+
+	(2)第一种形式:
+		- /AAA/DDD/BBB ： 表示AAA里面的DDD里面的BBB
+
+	(3)第二种形式:
+		- //BBB : 表示和这个名称相同，表示只要名称是BBB，都能得到
+
+
+	(3)第三种形式:
+		- /*/*/*/BBB : 所有第三层的B
+		- //* : 所有元素
+		- /* : 所有元素
+
+	(4)第四种形式:
+		- /AAA/BBB[1] : 表示AAA下面第一个BBB元素
+		- /AAA/BBB[last()] : 表示AAA下面的最后一个BBB元素
+
+	(5)第五种形式:
+		- //bbb[@id] : 只要BBB元素上面有id属性，都符合
+
+	(6)第六种形式:
+		- //bbb[@id='b1'] : 得到BBB元素上有id属性，且属性值为'b1'的BBB元素
+
+
+13、使用dom4j支持xpath具体操作
+	(1) 默认的情况下，dom4j不支持xpath
+
+	(2) 如果想要在dom4j里面有xpath
+		- 第一步需要，引入支持xpath的jar包,使用 jaxen-1.1-beta-6.jar
+
+	(3) 在dom4j里面提供了两个方法，用来支持xpath
+		-  selectNodes("xpath表达式") : 获取多个节点
+		- selectSingleNode("xpath表达式") ： 获取单一节点
+
+	(4)使用xpath: 查询xml中所有name元素的值
+		- 所有name元素的xpath表示: //name
+		- 使用selectNodes("//name");
+
+    //查询xml所有name元素的值
+    public static void test1() throws Exception {
+        /**
+         * 1.得到document
+         * 2.直接使用selectNodes方法得到所有的name元素
+         */
+        Document document = Dom4jUtils.getDocument(Dom4jUtils.PATH);
+        List<Node> list = document.selectNodes("//name");
+        for (Node node : list)
+        {
+            System.out.println(node.getText());
+        }
+    }
+
+    (5)使用xpath实现获取第一个p1下面的name的值
+    	- //p1[@id='aaa']/name
+    	- 使用到 selectSignleNode("xpath表达式")
+    public static void getP1Name() throws Exception {
+        Document document = Dom4jUtils.getDocument(Dom4jUtils.PATH);
+        Node p1Name = document.selectSingleNode("//p1[@id1='aaaa']/name");
+        System.out.println(p1Name.getText());
+    }
+
+
+14、实现简单的学生管理系统
+	(1)使用xml当做数，存储学生信息
+
+	(2)创建一个xml文件，写一些学生信息
+
+	(3)增加操作
+	//增加
+    public static void addStu(Student student) throws Exception
+    {
+        /**
+         * 1. 创建解析器
+         * 2. 得到document
+         * 3. 获取根节点
+         * 4. 根节点后添加<stu></stu>标签
+         * 5. <stu></stu>标签上面依次添加id name age
+         * 6. 在id name age上面依次添加值
+         * 7. 回写xml
+         */
+
+        //创建解析器
+        // 得到document
+        Document document = Dom4jUtils.getDocument(Dom4jUtils.PATH);
+
+        // 获取根节点
+        Element root = document.getRootElement();
+
+        //根节点后添加<stu></stu>标签
+        Element stu = root.addElement("stu");
+
+        //在<stu></stu>标签上面依次添加id name age
+        Element id1 = stu.addElement("id");
+        Element name1 = stu.addElement("name");
+        Element age1 = stu.addElement("age");
+
+        //在id name age上面一次添加值
+        id1.setText(student.getId());
+        name1.setText(student.getName());
+        age1.setText(student.getAge());
+
+        Dom4jUtils.xmlWriters(Dom4jUtils.PATH, document);
+    }
+	(4)删除操作
+    //删除 根据学生的id删除
+    public static void delStu(String id) throws Exception {
+        /**
+         * 1.创建解析器
+         * 2.得到document
+         * 3.获取根节点
+         * 4.获取所有的<id></id>标签,使用xpath,返回list集合
+         * 5.判读集合里面的id和传递的id是否相同
+         * 6.如果相同,把id所在的stu删除,获取对应的stu及其父节点
+         * 7.回写xml
+         */
+        Document document = Dom4jUtils.getDocument(Dom4jUtils.PATH);
+
+
+        List<Node> list = document.selectNodes("//id");
+
+        for (Node node : list)
+        {
+            if (node.getText().equals(id)) {
+                Element stu = node.getParent();
+                Element student = stu.getParent();
+                student.remove(stu);
+            }
+        }
+
+        Dom4jUtils.xmlWriters(Dom4jUtils.PATH, document);
+    }
+
+	(5)查询操作
+    //查询,根据id查询
+    public static Student getStu(String id) throws DocumentException {
+        /**
+         * 1.创建解析器
+         * 2.得到document
+         *
+         * 3.所有的id
+         * 4.返回的是list结合,遍历list集合
+         * 5.得到每一个id的节点
+         * 6.判断id的值和传递的id是否相同
+         * 7.如果相同,先获取id的父节点stu
+         * 8.通过stu获取name age的值
+         */
+        Document document = Dom4jUtils.getDocument(Dom4jUtils.PATH);
+
+        List<Node> list = document.selectNodes("//id");
+        for (Node node : list) {
+            if (node.getText().equals(id)) {
+                Element stu = node.getParent();
+                String name = stu.element("name").getText();
+                String age = stu.element("age").getText();
+                return new Student(id,name,age);
+            }
+        }
+        return null;
+    }

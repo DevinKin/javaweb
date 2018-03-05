@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>HTML实例</title>
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+    <ul id="myList">
+        <li>Coffee</li>
+        <li>Tea</li>
+    </ul>
+</body>
+<script type="text/javascript">
+// 得到li1
+//var li1 = document.getElementById("li1");
+// 得到ul
+//var ul1 = li1.parentNode;
+//alert(ul1.id);
+
+// 得到ul 第一个子节点
+var ul1 = document.getElementById("myList");
+var li1 = ul1.lastChild;
+alert(li1.nodeName);
+//var li1 = ul1.lastChild;
+//alert(li1);
+</script>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML实例</title>
+</head>
+<body>
+	<script type="text/javascript">
+		// length
+		var arr1 = [1,2,3];
+		document.write(arr1.length);
+
+		// concat
+		var arr2 = [4,5,6];
+		document.write("<hr/>");
+		document.write(arr1.concat(arr2));
+
+		// join
+		document.write("<hr/>");
+		document.write(arr1.join("-"));
+
+		// push方法
+		document.write("<hr/>");
+		document.write(arr1.push("!2"));
+		document.write("<br/>");
+		arr1.push(arr2);
+		document.write(arr1);
+	
+		// pop 方法
+		document.write("<hr/>");
+		document.write(arr1.pop());
+		document.write("<br/>");
+		document.write(arr1);
+
+		// reverse 方法
+		document.write("<hr/>");
+		document.write(arr1);
+		document.write("<br/>");
+		document.write(arr1.reverse());
+	</script>
+</body>
+</html>

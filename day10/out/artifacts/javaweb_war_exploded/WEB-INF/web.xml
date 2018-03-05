@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <servlet>
+        <servlet-name>AAA</servlet-name>
+        <servlet-class>cn.itcast.servlet.AServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AAA</servlet-name>
+        <url-pattern>/AServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>BBB</servlet-name>
+        <servlet-class>cn.itcast.servlet.BServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>BBB</servlet-name>
+        <url-pattern>/BServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CCC</servlet-name>
+        <servlet-class>cn.itcast.servlet.CServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CCC</servlet-name>
+        <url-pattern>/CServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DDD</servlet-name>
+        <servlet-class>cn.itcast.servlet.DServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DDD</servlet-name>
+        <url-pattern>/DServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EEE</servlet-name>
+        <servlet-class>cn.itcast.servlet.EServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EEE</servlet-name>
+        <url-pattern>/EServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>FFF</servlet-name>
+        <servlet-class>cn.itcast.servlet.FServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FFF</servlet-name>
+        <url-pattern>/FServlet</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>GGG</servlet-name>
+        <servlet-class>cn.itcast.servlet.GServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GGG</servlet-name>
+        <url-pattern>/GServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>A2</servlet-name>
+        <servlet-class>cn.itcast.servlet2.AServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>A2</servlet-name>
+        <url-pattern>/AServlet2</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>B2</servlet-name>
+        <servlet-class>cn.itcast.servlet2.BServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>B2</servlet-name>
+        <url-pattern>/BServlet2</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>C2</servlet-name>
+        <servlet-class>cn.itcast.servlet2.CServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>C2</servlet-name>
+        <url-pattern>/CServlet2</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>A3</servlet-name>
+        <servlet-class>cn.itcast.servlet3.AServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>A3</servlet-name>
+        <url-pattern>/AServlet3</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>A4</servlet-name>
+        <servlet-class>cn.itcast.forward.AServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>A4</servlet-name>
+        <url-pattern>/AServlet4</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>B4</servlet-name>
+        <servlet-class>cn.itcast.forward.BServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>B4</servlet-name>
+        <url-pattern>/BServlet4</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>A5</servlet-name>
+        <servlet-class>cn.itcast.include.AServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>A5</servlet-name>
+        <url-pattern>/AServlet5</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>B5</servlet-name>
+        <servlet-class>cn.itcast.include.BServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>B5</servlet-name>
+        <url-pattern>/BServlet5</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>A6</servlet-name>
+        <servlet-class>cn.itcast.servlet4.AServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>A6</servlet-name>
+        <url-pattern>/AServlet6</url-pattern>
+    </servlet-mapping>
+</web-app>

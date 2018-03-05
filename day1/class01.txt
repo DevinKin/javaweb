@@ -1,0 +1,311 @@
+* Day 1
+
+** 1、html简介
+
+   - HypeText Markup Language：超文本标记语言，网页语言
+     ** 超文本：超出文本的范畴，使用html可以轻松实现这个功能
+     ** 标记：html的所有操作都是可以通过标记实现的，标记就是标签
+     ** 网页语言：
+
+  * 第一个html程序:
+  	- html后缀是 .html .htm
+
+  * html的规范
+  	1、开始和结束标签 <html></html>
+  	2、html包含两部分内容
+  		(1) <head>设置相关信息</head>
+  		(2) <body>显示在页面的内容都显示在body里面</body>
+  	3、html标签又开标签，也有结束标签
+  		-<head></head>
+  	4、html的代码不区大小写
+  	5、有些标签没有结束标签，在标签内结束
+  		-<br/>
+
+  * html的操作思想(******)
+  	网页中又很多数据，不同的数据可能不同的显示效果，这时候需要使用标签将
+  	数据封装起来，通过修改标签的属性值修改标签的样式。
+
+
+** 2、html的常用标签
+
+	(1)文字标签：修改文字的样式
+		-<font></font>
+		-属性：
+			* size：大小，范围1-7，超出范围默认为7
+			* color：文字颜色
+				- 两种表示方式：英文单词、16进制rgb #ffffff：RGB
+
+	(2)注释标签
+		-java 注释：3种
+		-html 的注释： <!-- html注释 -->
+
+
+** 3、标题标签、水平标签和特殊字符
+
+	(1) 标题标签
+		<h1></h1> <h2></h2> <h3></h3> .... <h6></h6>
+		1-6依次变小，自动换行。
+	(2) 水平线标签
+		- <hr/>
+		- 属性
+			** size: 水平线粗细，范围1-7，超出范围默认为7
+			** color: 水平线颜色,英文单词、16进制rgb #ffffff：RGB
+		代码：
+		<hr size="5" color = "red" />
+
+	(2) 特殊字符
+		- 想要在页面上显示这样的内容： <html>:是网页的开始
+		需将特殊字符转义：
+			 < : &lt;
+			 > : &gt;
+			 空格 : &nbsp;
+
+
+** 4、列表标签
+
+	(1) <dl></dl>：表示列表的范围
+		* 在dl 里面 <dt></dt>：上层内容
+		* 在dl 里面 <dd></dd>：下层内容
+		-代码
+
+			<dl>
+				<dt>传智播客</dt>
+				<dd>财务福</dd>
+				<dd>学工部</dd>
+				<dd>人事部</dd>
+			</dl>
+
+	(2) <ol></ol> ：有序列表的范围
+		- 是属性 type: 设置排序方式 1 a i
+
+		* 在ol标签里面 <li>具体内容</li>
+	-代码
+
+	(3)特殊符号列表(无序)：<ul type = "circle"> <li></li>
+		- 属性 tpye： disc(默认)、circle、square
+
+		- 代码：
+		<ul type = "circle">
+			<li>传智播客</li>
+			<li>财务部</li>
+			<li>学工部</li>
+			<li>人事部</li>
+		</ul>
+
+
+**	5、图像标签
+
+		(1)<img = src="图片的路径"/>
+			属性：
+			- src: 图片路径
+			- width: 图片的宽度
+			- height: 图片的高度
+			- alt: 图片上显示文字,停留片刻显示文字,若图片不存在，可
+			显示错误。
+
+
+** 	6、路径介绍
+		
+		(1)绝对路径
+		(2)相对路径
+
+
+** 7、案例1：
+
+
+** 8、超链接标签：
+	(1)链接资源：
+		- <a href="链接到资源的路径">显示在页面上的内容</a>
+			属性:
+			- href: 链接的资源的地址
+			- target: 设置打开方式，默认在当前页打开
+				-- _blank: 在一个新窗口打开
+				-- _self: 在当前页打开，默认方式
+			- 当前超链接不需要到任何地址，在href里面加#
+				- <a href="#">这是一个超链接2</a>
+	(2)定位资源：
+		- 如果想要定位资源，定义一个位置
+			<a name="top">顶部</a>
+		- 回到这个位置
+			<a hrep="#top">回到顶部</a>
+		- 引入一个标签 pre：原样输出<pre></pre>
+
+
+** 9、表格标签
+	(1)- 可以对数据进行格式化，使数据显示更加清晰
+
+	(2)- <table></table>: 表示表格的范围
+		-属性：
+			border：表格线
+			bordercolor: 表格线的颜色
+			cellspacing: 单元格直接距离
+			width:表格的宽度
+			height:表格的高度
+
+		-- 在table里面 <tr></tr>(一行)
+			-属性：
+				align: 设置对齐方式 left center right
+
+			--- 在tr里面 <td></td>(一个单元格)
+				-属性：
+					align: 设置对齐方式 left center right
+	
+	(3)<th>也可以表示单元格：
+		- 表示可以实现居中和加粗			
+
+	(4)表格的标题
+		<caption></caption>
+
+	(5)合并单元格<td>
+		- 属性:
+			rowspan:跨行
+			<td rowspan="3">12</td>
+			colspan:跨列
+			<td colspan="3">人员信息</td>
+
+
+** 10、表单标签
+	- 可以提交数据到服务器，过程可以使用表单标签实现。
+
+	- <form></form>: 定义一个表单的范围
+		-- 输入项：可以输入内容或者选择内容的部分
+		--- 大部分的输入项都可以使用标签<input type="输入项的类型">
+
+		- 属性:
+			-- action: 提交到地址，默认提交到当前页面
+			-- method: 表单的提交方式
+				常用的有两种
+				a. get(默认)
+				b. post
+			-- 面试题：get和post的区别
+				1、get请求地址栏会携带提交的数据,post不会携带(请求体里面,day7-http协议)
+				2、get请求的安全级别较低，post较高
+				3、get请求数据大小的限制，post没有限制
+
+			-- enctype: 一般请求不需要这个属性，做文件上传时候需要设置这个属性(day 22)
+
+	- 输入项内必须有一个name属性。
+
+	(1)普通输入项
+		<input type="text"/>
+
+	(2)密码输入项：
+		<input type="password"/>
+
+	(3)单选输入项：
+		<input type="radio"/>
+			- 在里面需要属性name
+			- 属性name值一样
+			- 必须要有一个value值
+		- 实现默认选中的属性
+			-- checked="checked"
+
+	(4)复选输入项：
+		<input type="checkbox"/>
+			- 在里面需要属性name
+			- name的属性值必须相同
+			- 必须要有一个value值
+
+	(5)文件输入项：(在后面上传时候用到)
+		<input type="file"/>
+
+	(6)下拉输入项(不是 在input标签里面的)
+		<select name="birth">
+			<option value="1991">1991</option>
+			<option value="1992">1992</option>
+			<option value="1993">1993</option>
+		</select>
+		- 实现默认选中的属性
+			-- selected="selected"
+
+	(7)文本域
+		<textarea cols="" rows=""> </textarea>
+
+	(8)隐藏项(不会显示在页面上,但是存在于html代码里面)
+		<input type="hidden"/>
+
+	(9)提交按钮
+		<input type="submit"/>
+			-属性
+				-- value：按钮上面的内容
+
+	(10)使用图片提交
+		<input type="image" src="图片路径"/>
+
+	(11)重置按钮,回到输入项的初始状态
+		<input type="reset"/>
+
+	(12)普通按钮(和js一起使用)
+		<input type="button" value=""/>
+
+
+		file:///home/king/Learningnote/javaweb/day1/10-%E8%A1%A8%E5%8D%95%E6%A0%87%E7%AD%BE%E4%B8%80.html?sex1=on&love=on&love=on&birth=1991
+
+		在输入项内写了name属性之后
+		file:///home/king/Learningnote/javaweb/day1/10-%E8%A1%A8%E5%8D%95%E6%A0%87%E7%AD%BE%E4%B8%80.html?phone=123&pwd=213&sex1=on&love=on&birth=1991&hid=
+
+		在radio输入项内写了value属性之后
+		file:///home/king/Learningnote/javaweb/day1/10-%E8%A1%A8%E5%8D%95%E6%A0%87%E7%AD%BE%E4%B8%80.html?phone=ads+f&pwd=adf&sex1=boy&love=yumao&love=mao&birth=1991&hid=
+
+
+** 11、实例：使用表单标签实现注册页面
+	- 使用表格实现页面效果
+	- 超链接不想要效果 href="#"
+	- 如果表格里面的单元没有内容，使用空格作为占位符 &nbsp;
+	- 使用图片提交表单 <input type="image" src="图片链接"/>
+
+
+** 12、html中的其他的常用标签的使用
+	- b s u i pre sub div span
+	(1)b: 加粗
+
+	(2)s: 删除线
+
+	(3)i: 斜体
+
+	(4)pre: 原样输出
+
+	(5)sub: 下标
+
+	(6)sup: 上标
+
+	(7)div: 自动换行
+
+	(8)span: 在一行显示
+
+	(9)p: 段落标签,比<br>多一行
+
+** 13、HTML的头标签的使用
+	- html 两部分组成 head 和 body
+	-- 在head里面的标签是头标签
+
+	-- title标签: 表示在标签上显示的内容
+	(1) <meta>标签: 设置页面的一些相关的内容
+	代码：
+	<meta http-equiv="refresh" content="3;url=test.html"/>
+	3秒跳转到test.html
+	<meta name="keywords" content="小姑 小辉哥 晖晖" charset="utf-8">
+
+	(2)<base>标签: 设置超链接的基本设置,可以统一设置超链接的打开方式
+	- 代码：
+		<base target="_balnk">
+
+	(3)<link>标签: 引入外部文件
+		-- css 可以使用link标签引入css文件
+
+** 14、框架标签：
+	(1) <frameset>
+		- rows: 按行进行划分
+			-- <frameset row="80,*">
+
+		- cols: 按列进行划分
+			-- <frameset cols="80,*">
+
+	(2) <frame>
+		- 具体显示的页面
+			- <frame name="lower_left" src="b.html">
+
+	(3)使用框架标签时，不能写在body里面，使用框架标签，需要body去掉
+
+	(4)左边的页面超链接在右边的框架中打开
+		- <a href="链接路径" target="right">内容</a>

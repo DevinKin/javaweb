@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>测试请求参数</h1>
+<a href="AServlet3?xxx=XXX&&yyy=YYY">点击这里</a>
+<form action="/AServlet3" method="post">
+    用户名: <input type="text" name="username"/><br/>
+    密码: <input type="password" name="password"/><br/>
+    爱好: <input type="checkbox" name="hobby" value="cf"/>吃饭
+        <input type="checkbox" name="hobby" value="sj">睡觉
+        <input type="checkbox" name="hobby" value="ddm">打代码<br/>
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>

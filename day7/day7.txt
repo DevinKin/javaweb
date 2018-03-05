@@ -1,0 +1,489 @@
+1、java编程规范
+	(1)创建包 package
+		-cn.itcast.test XX.XX.XX
+
+	(2)在包里面创建一个类
+		- 类的命名规则:
+			首字母要大写 TestDemo1
+
+	(3)方法的命名规范:
+		- 首字母小写
+
+
+2、debug的调试模式(断点调试模式)
+	(1)使用debug第一步需要设置一个断点
+
+	idea 2017:
+	(2)Step over(F8) : 单步执行
+
+	(3)Resume(F9) : 调试结束，如果当前的断点之后还有断点，跳到下一个端点
+			如果当前断点之后没有断点，则结束调试。
+
+	(4)Step into(F7)
+
+	(5)Step Out(Shift+F8)
+
+
+3、junit的使用
+	(1)单元测试
+
+	(2)测试对象是一个类中的方法
+
+	(3)junit不是javase的一部分，想要使用，需要导入jar包
+
+	(4)junit版本 3.x 4.x
+		- 单元测试方法时，方法命名规则 public void 方法名 	{}
+
+	(5)使用注释方式运行测试方法，在方法上面写
+		@Test，表示这个方法进行单元测试
+
+	(6)要运行类中的多个测试方法,点击类中的其他位置，run as -- junit test
+
+
+	(7)@Ignore: 表示这个方法不进行单元测试
+
+	(8)@Before: 表示在每个方法之前运行
+
+	(9)@After: 表示在每个方法之后运行
+
+	(10)断言
+        //使用断言
+        //Assert.assertEquals("测试期望的值", "方法运行的实际值");
+        Assert.assertEquals(80, sum);
+
+
+4、jdk5.0新特性简介
+	(1)jdk 1.1 1.2 1.4 5.0
+
+	(2)泛型
+
+	(3)枚举
+
+	(4)静态导入
+
+	(5)自动拆装箱
+
+	(6)增强for
+
+	(7)可变参数
+
+5、泛型的简介
+
+	(1)为什么要使用泛型?
+		- 一般使用在集合上
+		- 如果把一个字符串类型的值放入到集合里面，这时候，这个值放入集合之后失去本身的类型，成了Object类型，这时候对这个值进行类型转换，容易出现类型转换错误，使用泛型来解决这个问题
+
+	(2)在集合上使用泛型:
+		- 常用集合 list set map
+		- 泛型语法 集合<类型> 如 list<String>
+
+	(3)在set上使用泛型
+    //泛型使用set集合上
+    @Test
+    public void testSet() {
+        Set<String> set = new HashSet<String>();
+        set.add("www");
+        set.add("aaa");
+        set.add("qqq");
+        set.add("qqq");
+
+        //遍历set 有两种方式
+        //迭代器 增强for
+        //增强for
+        //不能有重复元素
+        for (String s2 : set) {
+            System.out.println(s2);
+        }
+        System.out.println("=============");
+
+        Iterator<String> it = set.iterator();
+        while (it.hasNext())
+        {
+            System.out.println(it.next());
+        }
+    }
+
+    (4)在Map上使用泛型
+    @Test
+    public void testMap() {
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("aaa", "111");
+        map.put("bbb", "222");
+        map.put("ccc", "333");
+
+        // 遍历map有两种方式
+        // 1. 获取所有的key 通过key得到value,使用get方法
+        // 2. 获取key和value的关系,entry
+
+        //使用第一种方式遍历
+        Set<String> sets = map.keySet();
+        for (String key : sets)
+        {
+            System.out.println(key + " : " + map.get(key));
+        }
+
+        System.out.println("====================");
+        //使用第二种方式遍历
+        Set<Map.Entry<String, String>> set1 = map.entrySet();
+        for (Map.Entry<String, String> entry : set1)
+        {
+            //enter是key和value关系
+            String keyvv = entry.getKey();
+            String valuev = entry.getValue();
+            System.out.println(keyvv + " : " + valuev);
+        }
+    }
+
+    (5)在泛型里面是一个对象，不能是基本的数据类型，比如int 
+    	- 写基本的数据类型赢对应包装类
+    		byte -- Byte
+    		short -- Short
+    		int -- Integer
+    		long -- Long
+
+    		float -- float
+    		double -- Double
+    		char -- Character
+    		boolean -- Boolean
+
+
+6、泛型方法
+	(1)定义一个数组，实现制定位置上数组元素的交换
+
+	(2)方法的逻辑相同，只是数据类型不同，这时候使用泛型方法
+    public static <T> void swap1(T[] arr, int a, int b) {
+        T temp = arr[a];
+        arr[a] = arr[b];
+        arr[b] = temp;
+    }
+
+    (3)实现一个泛型方法，接受任意一个数组，颠倒数组中的所有元素
+
+
+7、泛型在类上的使用
+	(1)在一个类上定义一个类型，这个类型可以在类里面直接使用
+public class TestDemo04<T> {
+
+    //在类里面直接使用T的类型
+    T aa;
+    public void test11(T bb) {
+    }
+
+    //写一个静态方法,在类上面定义的泛型不能在静态方法里面使用
+    public static void test12(T cc) {
+
+    }
+}
+
+
+8、枚举的简介
+	(1)什么是枚举?
+		在一定的范围内取值，这个值只能是这个范围内中的任意一个
+
+	(2)使用一个关键字 enum
+		- 代码:
+		enum Color3 {
+			RED, GREEN, YELLOW;
+		}
+	(3)枚举的构造方法也是私有的
+
+	(4)特殊枚举的操作
+	- 在枚举里面有构造方法
+		-- 构造方法里面有参数，需要在每个实例上面都传递这个参数
+
+	- 在枚举类里面有抽象方法
+		-- 在枚举的每个实例里面都重写这个抽象方法
+
+		enum Color11 {
+		    RED("red") {
+		        @Override
+		        public void print1() {
+		            System.out.println("red");
+		        }
+		    }, GREEN("green") {
+		        @Override
+		        public void print1() {
+		            System.out.println("green");
+		        }
+		    }, YELLOW("yellow") {
+		        @Override
+		        public void print1() {
+		            System.out.println("yellow");
+		        }
+		    };
+		    private Color11(String name) { }
+		    //抽象方法
+		    //当在枚举类里面写了抽象方法之后,需要在每个实例上面都实现抽象方法
+		    public abstract void print1();
+		}
+
+
+9、枚举的api的操作
+	(1)name() 方法:
+		-返回枚举的名称
+
+	(2)ordinal() 方法:
+		- 返回枚举的下标，从0开始
+
+	(3)valueOf(Class<T> enumType, String name) 方法:
+		-得到枚举的对象
+
+	(4)还有两个方法，不在api里面，在编译的时候生成两个方法
+		valueof(String name)
+			- 转换枚举对象
+		values()
+			- 获得枚举对象数组
+
+	(5)枚举对象、枚举对象下标、枚举对象名称之间的转换
+    //知道枚举对象,得到枚举名称和下标
+    @Test
+    public void test1() {
+        // 得到枚举
+        Color100 c100 = Color100.RED;
+        // 得到枚举的名称
+        System.out.println(c100.name());
+        // 得到枚举的下标
+        System.out.println(c100.ordinal());
+
+    }
+
+    //知道枚举的名称,得到枚举的对象和下标
+    @Test
+    public void test2() {
+        String name = "GREEN";
+        //得到枚举对象
+        Color100 c1 = Color100.valueOf(name);
+        System.out.println(c1.ordinal());
+    }
+
+    //知道枚举的下标,得到枚举的对象和名称
+    @Test
+    public void test3() {
+        int idx2 = 2;
+        //得到枚举对象
+        Color100[] cs = Color100.values();
+        //根据下标得到对象
+        Color100 c100 = cs[idx2];
+        System.out.println(c100.name());
+    }
+
+
+10、静态导入
+	(1)可以在java代码里面,直接使用静态导入的方式,导入静态方法或者常量
+
+	(2)语法: import static XX.XX.XX
+
+	(3)有时候静态导入容易出错
+
+	(4)代码:
+		import static java.lang.System.out;
+		import static java.util.Arrays.sort;
+
+		public class TestDemo1 {
+		    public static void main(String[] args) {
+		        out.println("hello");
+
+
+		        int[] arr1 = {10,1,3,20,15};
+		        sort(arr1);
+		        System.out.println(Arrays.toString(arr1));
+		    }
+		}
+
+	(5)比如实现一个计算器，在Math类里面的方法可以直接调用
+
+
+11、自动拆装箱
+	(1)装箱
+		- 把基本的数据类型转换成包装类
+
+	(2)拆箱
+		- 把包装类转换成基本的数据类型
+
+	(3)代码:
+        //自动装箱
+        Integer i = 10;
+
+        //自动拆箱
+        int m = i;
+
+    (4)jdk1.4实现装箱和拆箱
+    	public void test1() {
+    		Integer m = new Integer(10);
+    		int a = m.intValue();
+    	}
+
+    (5)练习:
+    执行结果，integer....
+    public static void main(String[] args)
+    {
+        doSomeThing(10);
+    }
+
+    public static void doSomething(double m) {
+        System.out.println("double......");
+    }
+
+    public static void doSomeThing(Integer a) {
+        System.out.println("integer.....");
+    }
+
+
+12、增强for循环
+	(1)语法:
+		for (遍历出来的值 : 集合 ) {
+		}	
+
+	(2)使用增强for循环的条件
+		- 实现Iterable接口可以使用增强for循环
+		list,set 实现了iterator接口，所以可以使用增强for循环
+		map不能实现增强for循环，没有实现Iterator接口
+
+	(3)增强for循环出现目的: 喂了替代迭代器
+		- 增强for底层就是迭代器
+
+13、内容补充
+	(1)泛型擦除
+		- 首先泛型只是出现在源代码阶段，当编译之后，泛型就不存在了
+
+
+14、可变参数
+	(1)可变参数可以应用的场景
+		- 实现多个数相加
+		- 逻辑相同，唯一不同的是传递的参数的个数，可以使用可变参数
+
+	(2)代码:
+    public static void add1(int ...nums) {
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        System.out.println(sum);
+    }
+
+    (3)注意:
+    	- 可变参数需要写在静态方法的参数列表中
+
+    	- 不能单独定义，只能在参数列表中使用
+
+    	- 在方法的参数列表中只能有一个可变参数
+
+    	- 方法的参数列表中的可变参数,必须放在参数的最后
+
+
+15、反射
+	(1)应用在一些通用性比较高的代码中
+
+	(2)后面学的框架，大多数都是使用反射来实现的
+
+	(3)在框架开发中，都是基于配置文件开发
+		- 在配置文件中配置了类或者类中的方法,可以通过反射得到类中的所有内容,可以让类中的某个方法来执行
+
+	(4)类中的所有内容: 属性、没有参数的构造方法、有参数的构造方法、普通方法
+
+	(5)得到Class类的三种方式:
+		- 类名.class
+		- 对象.getClass()
+		- 使用Class.forName("类路径")
+
+	(6)反射的原理:
+		a. 首先需要把java文件保存到本地硬盘 .java
+
+		b. 编译java文件，生成.class文件
+
+		c. 使用jvm，把class文件通过类加载器加载到内存中
+
+		d. 万事万物皆对象，class文件在内存中使用Class类表示
+
+		e. 当使用反射时，首先需要获取到Class类，得到这个类之后，就可以得到Class文件里面的所有内容
+			- 包含属性 构造方法 普通方法
+
+			- 属性通过一个类 Filed
+			- 构造方法通过一个类 Constructor
+			- 普通方法通过一个类 Method
+
+
+16、使用反射操作无参数的构造方法
+	(1)获取Class类
+        //获取Class类
+        Class clazz1 = Person.class;
+        Class clazz2 = new Person().getClass();
+        Class clazz3 = Class.forName("cn.itcast.test09.Person");
+
+    	- 比如对一个类进行实例化，可以new，不使用new，怎么获取
+	    //操作无参数的构造方法
+	    @Test
+	    public void test1() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+	        //得到Class
+	        Class clazz3 = Class.forName("cn.itcast.test09.Person");
+	        Person p = (Person)clazz3.newInstance();
+	        p.setName("张三");
+	        System.out.println(p.getName());
+	    }
+
+17、使用反射操作有参数的构造方法
+	(1)操作有参数的构造方法
+	    @Test
+	    public void test2() throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+	        //得到Class
+	        Class c1 = Class.forName("cn.itcast.test09.Person");
+	        //使用有参数的构造方法
+	        c1.getConstructors();       //获取所有的构造方法
+	        //传递是有参数的构造方法里面参数类型，类型使用class形式传递
+	        Constructor cs = c1.getConstructor(String.class, String.class);
+	        //通过有参数的构造设置值
+	        Person p1 = (Person)cs.newInstance("张三", "100");
+	        System.out.println(p1.getName() + " : " + p1.getId());
+	    }
+
+
+18、使用反射操作属性
+    //操作name属性
+    @Test
+    public void test3() {
+        //得到Class类
+        try {
+            Class c2 = Class.forName("cn.itcast.test09.Person");
+            //得到name属性
+            //c2.getDeclaredFields();         //表示得到所有的属性
+
+            //通过这个方法得到属性，参数是属性的名称
+            Field f1 = c2.getDeclaredField("name");
+            Person p11 = (Person)c2.newInstance();
+            //设置可以操作私有属性
+            f1.setAccessible(true);
+            f1.set(p11,"wangwu");       //相当于p11.name = "wangwu";
+            System.out.println(f1.get(p11));    //相当于p11.name
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+19、使用反射操作普通方法
+	(1)使用Method类表示普通方法
+    //使用反射操作普通方法
+    @Test
+    public void test4() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, InstantiationException {
+        //得到Class类
+        Class c4 = Class.forName("cn.itcast.test09.Person");
+        //得到普通方法
+        //c4.getDeclaredMethods();      //得到所有普通方法
+        Method m1 = c4.getDeclaredMethod("setName", String.class);
+        //得到Person实例
+        Person p4 = (Person)c4.newInstance();
+
+        //操作的私有方法，需要设置值为true
+        m1.setAccessible(true);
+
+        //让setName方法执行,执行设置值
+        //传递两个参数，第一个参数,方法名称,第二个参数,方法的参数,可变参数
+        m1.invoke(p4, "李四");
+        System.out.println(p4.getName());
+    }
+
+    (2)当我们操作的是静态的方法时，因为静态方法的调用方式是类名.方法名称，不需要类的实例
+
+   	(3)使用反射操作静态方法时，也是不需要类的实例的
+
+   	(4)在invoke方法的第一个参数里面写null
+   		m1.invoke(null, "李四");

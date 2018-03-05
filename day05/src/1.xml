@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<!DOCTYPE person SYSTEM "1.dtd">-->
+<!DOCTYPE person [
+        <!ELEMENT person (name*, age?,sex, school, birthday)>
+        <!ELEMENT name (#PCDATA)>
+        <!ATTLIST name
+                ID3 ID #REQUIRED
+                >
+        <!ELEMENT age (#PCDATA)>
+        <!ELEMENT sex EMPTY>
+        <!ATTLIST sex
+            ID4 CDATA #FIXED "ABC"
+        >
+
+        <!ELEMENT school ANY>
+        <!ELEMENT birthday (#PCDATA)>
+
+        <!ATTLIST birthday
+                ID1 CDATA #IMPLIED
+                >
+        <!ATTLIST age
+                ID2 (AA|BB|CC) #REQUIRED
+                >
+
+
+        <!ENTITY TEST "HAHAHEHE">
+        ]>
+
+<person>
+    <name ID3="ab">&TEST;</name>
+    <name ID3="cd">zhangsan2</name>
+    <age ID2="AA">20</age>
+    <sex ID4="ABC"></sex>
+    <school>dongxiu</school>
+    <birthday>2015</birthday>
+    <!--<猫>10000</猫>-->
+</person>

@@ -1,0 +1,218 @@
+1、常见的软件系统体系结构B/S、C/S
+
+	(1)C/S结构: 客户端/服务器
+		- 优点:安全比较好
+
+	(2)B/S结构: 浏览器/服务端
+		- 优点: 只需要编写服务器程序
+
+2、WEB资源
+	(1)html: 静态资源
+
+	(2)jsp/Servlet: 动态资源(ASP,PHP)
+
+	(3)静态资源和动态资源的区别:
+		静态资源：浏览器可以看得到
+		动态资源：需要转换成html,再给浏览器看(它可以有变量)
+
+
+3、Web服务器
+	(1)Tomcat(Apache)：当前应用最广的JavaWeb服务器
+
+	(2)JBoss(Redhat红帽): 支持JavaEE，应用比较广。EJB容器
+
+	(3)GlassFish(Orcale): Oracle开发JavaWeb服务器，应用不是很广
+
+	(4)Resin(Caucho): 支持JavaEE，应用越来越广
+
+	(5)Weblogic(Orcale): 要钱的！支持JavaEE，适合大型项目
+
+	(6)Webbsphere(IBM): 要钱的！支持JavaEE，适合大型项目 
+
+
+4、Tomcat(开源、免费)
+	(1)Tomcat7支持Servlet3.0。
+
+
+5、修改Tomcat端口号
+	(1)/usr/tomcat/apache-tomcat-7.0.84/conf/server.xml
+
+
+6、Tomcat的目录结构
+	(1)bin: 可执行脚本目录
+
+	(2)conf: 配置文件目录
+
+	(3)lib: Tomcat使用的jar包的目录
+
+	(4)logs: Tomcat存放的日志文件目录
+
+	(5)temp: Tomcat生成临时文件的目录
+
+	(6)webapps: web应用程序存放的目录
+
+	(7)work: Tomcat生成动态资源的目录
+
+
+7、Web应用
+	(1)静态网站:
+		- 在webapps目录下创建一个目录(命名必须不包含中文和空格)，这个目录称为项目目录
+
+		- 在项目目录下创建一个html文件
+
+	(2)动态网站:
+		- 在webapp目录下创建一个项目目录
+
+		- 在项目目录下创建如下内容:
+			WEB-INF目录:
+				在WEB-INF目录下创建web.xml文件
+			创建静态或动态页面
+web.xml:
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+  version="3.0"
+  metadata-complete="true">
+
+
+</web-app>
+
+	(3)目录树
+		webapps
+		|-hello
+			|-index.html
+			|-WEB-INF
+				|-web.xml
+				|-classes
+				|-lib
+
+
+8、配置外部应用
+方式一：
+	(1)原来的项目放在webapps下面，现在我们放到外面，也希望tomcat可以找到它
+
+	(2)配置/usr/tomcat/apache-tomcat-7.0.84/conf/server.xml该文件
+	<Host name="localhost"  appBase="webapps"
+	unpackWARs="true" autoDeploy="true"> 
+	下添加如下内容:
+ 	<Context path="hello44" docBase="/home/king/hello4"/>
+
+ 		a. path 为url填写的路径
+ 		b. doctype 为webapp真实路径
+
+ 	http://127.0.0.1:8080/hello44/index.jsp
+
+方式二：
+	(1)conf/Catalina/localhost，在该目录下创建filename.xml文件，该文件中编写
+	<Context>元素，代码如下:
+	<Context docBase="/home/king/hello5"/>
+
+	- 此处只写webapp真实路径
+
+	- 在url中输入filename即可访问webapp:
+	http://127.0.0.1:8080/hello55/index.jsp
+
+
+9、配置虚拟主机
+	(1)修改host文件
+
+	(2)修改server.xml文件中Host标签的name属性，也可修改appBase属性修改项目位置
+
+
+10、server.xml元素的介绍
+	(1)Context表示上下文,对应一个项目
+
+	<sever>
+		<service>
+			<Connector>
+			<Engine>
+				<Host>
+
+
+11、HTTP协议
+	(1)请求协议、响应协议
+
+	(2)请求:
+请求行
+多个请求头信息：头名称：请求头值;
+空行
+请求体
+
+GET /hello3/index.jsp HTTP/1.1
+Host: localhost:8080
+Connection: keep-alive
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: Idea-6422c823=f99bc6e0-4c9d-4ad3-b424-1db119cef6c6; io=9lZ60LoxindO3SlkAAAA
+
+- Get请求有空行，没有请求体
+
+
+	(2)响应:
+响应行: 协议/版本 状态码 状态码的解析
+			以2开头算成功，3开头转移，4开头客户端错误，5开头服务器错误
+响应头: (key/value格式)
+空行
+响应正文
+
+HTTP/1.1 200 OK
+Server: Apache-Coyote/1.1
+Set-Cookie: JSESSIONID=C5E5C36763349D2C0991074118DB1DFD; Path=/hello3; HttpOnly
+Content-Type: text/html;charset=UTF-8(响应内容的MIME类型)
+Content-Length: 101
+Date: Wed, 14 Feb 2018 00:44:30 GMT
+
+	(3)POST请求
+POST /index.jsp HTTP/1.1
+Host: localhost:8080
+Connection: keep-alive
+Content-Length: 30
+Cache-Control: max-age=0
+Origin: http://localhost:8080
+Upgrade-Insecure-Requests: 1
+Content-Type: application/x-www-form-urlencoded(表示表单中的数据会自动使用url编码)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8
+Referer: http://localhost:8080/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+Cookie: Idea-6422c823=f99bc6e0-4c9d-4ad3-b424-1db119cef6c6; io=9lZ60LoxindO3SlkAAAA
+
+	(4)Referer请求头
+		-表示请求从哪发出，如超链接，某服务器通过Referer头获得通过超链接而来的请求
+
+
+12、常用响应吗
+	(1)200:请求成功
+
+	(2)404:请求的资源没找到
+
+	(3)500:请求资源找到了，服务器内部出现了错误
+
+	(4)302:重定向
+
+	(5)304:缓存静态页面和最后修改时间，一般对静态页面有效
+		- 响应头 Last-Modified: 最后修改时间
+		- 请求头 If-Modified-Since: 把上次请求的index.html的最后修改时间还给服务器
+		比较If-Modified-Since的时间与文件的真实时间一样时，服务器会相应304，而且不会有
+		响应正文，表示浏览器缓存的就是最新版本
+
+
+13、其他响应头
+	(1)告诉浏览器不要缓存的响应头
+		- Expires: 1;
+		- Cache-Control: no-cache;
+		- Pragma: no-cache;
+
+	(2)自动刷新响应头，浏览器会在3秒之后请求 http://itcast.cn
+		- Refresh:3;url=http://itcast.cn
+
+
+14、HTML中指定响应头
+	(1)在HTML页面中可以使用<meta http-equiv="" content="">来指定响应头，
+	例如index.html页面中给出<meta http-equiv="Refresh" content="3;url=http://itcast.cn">，表示浏览器只会显示index.html页面3秒，然后自动跳转到http://itcast.cn

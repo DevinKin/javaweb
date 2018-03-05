@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML实例</title>
+</head>
+<body>
+	<script type="text/javascript">
+		// eval
+		var str = "alert('1234')";
+		eval(str);
+
+		// encodeURI
+		document.write("<hr/>");
+		var str1 = "测试中文aaa123";
+		document.write(encodeURI(str1));
+
+		// decodeURI
+		document.write("<hr/>");
+		document.write(decodeURI(str1));
+
+		// isNaN
+		document.write("<hr/>");
+		var str2 = "aaa";
+		alert(isNaN(str2));
+
+		// parseInet
+		document.write("<hr/>");
+		var str3="123";
+		document.write(parseInt(str3+ 1));
+	</script>
+</body>
+</html>

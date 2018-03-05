@@ -1,0 +1,552 @@
+1、表单提交方式
+	(1)使用submit提交
+		<form>
+			...
+			<input type="submit" />
+		</form>
+
+	(2)使用button提交
+	-代码:
+		<form id="form1">
+			<input type="text" name="username"/>
+			<br/>
+			<input type="button" value="提交" onclick="form1();" />
+		</form>
+				function form1 () {
+				var form1 = document.getElementById("form1");
+				// 设置action
+				form1.action = "hello.html"
+				//提交form表单
+				form1.submit();
+			}
+
+	(3)使用超链接提交
+		<a href="hello.html?username=123456" >使用超链接提交</a>
+
+	(4)onclikc: 鼠标点击事件
+
+	(5)onchange: 改变内容事件(一般和select一起使用)
+
+	(6)onfocus: 得到焦点
+
+	(7)onblur:	失去焦点
+		<input type="text" id="id1" name="text1" value="please input" onfocus="focus1();" onblur="blur1();"/>
+	
+		function focus1 () {
+			var input1 = document.getElementById("id1");
+			input1.value = "";
+		}
+
+		function blur1() {
+			alert("blur");
+		}
+
+
+2、xml简介
+	(1)eXtensible Markup Language: 可扩展标记型语言
+		- 标记型语言: html是标记型语言
+			- 也是使用标签来操作
+
+		- 可扩展:
+			-- html里面的标签是固定的，每个标签都有特定的含义 <h1> <br/> <hr/>
+
+			-- 标签可以自己定义,可以写中文标签 <person></person> <猫></猫>
+
+	(2) xml用途:
+		- html 是用于显示数据，xml也可以显示数据(不是主要功能)
+		- xml主要功能: 为了存储数据
+
+	(3) xml是w3c组织发布的技术
+
+	(4) xml有两个版本 1.0，1.1
+		- 目前使用都是1.0版本，1.1版本不能向下兼容
+
+
+3、xml的应用
+	(1)不同的系统之间传输数据
+
+	(2)用来表示生活中有关系的数据
+
+	(3)经常在配置文件中使用
+
+
+4、xml的语法
+	(1) xml的文档声明
+		- 创建一个文件，后缀名是 .xml
+
+		- 如果写xml，第一步必须有一个文档声明
+		<?xml version="1.0" encoding="UTF-8"?>
+
+		- 文档声明写在第一行第一列
+
+		- 属性
+			-- version: xml的版本 使用1.0
+			-- encoding: xml编码 gbk utf-8 iso8859-1(不包含中文)
+			-- standalone: 是否需要以来其他文件 yes/no
+
+	(2)定义元素(标签)
+
+	(3)定义属性
+
+	(4)注释
+
+	(5)特殊字符
+
+	(6)CDATA区
+
+	(7)处理(PI)指令
+
+
+5、xml的元素定义
+	(1)标签的定义
+		-- 标签定义有开始必须要有结束: <person></person>
+
+		-- 标签包含标签主体，标签没有内容，可以在标签内结束; </aaa>
+
+		-- 标签可以嵌套，必须要合理嵌套
+			-- 合理嵌套 <aa><bb></bb></aa>
+			-- 不合理嵌套 <aa><bb></aa></bb>
+
+		-- 一个XML必须有且只有一个根标签,其他标签都是这个标签下面的标签
+
+		-- 在xml中把空格和换行都当成内容来解析,下面这两段代码含义是不同的
+			<aa>1111111</aa>
+			<aa>
+				1111111
+			</aa>
+
+	(2)xml中标签的名称规则
+		- xml代码区分大小写
+
+		- xml的标签不能以数字和下划线(_)开头
+
+		- xml的标签不能以xml、XML、Xml等开头
+			<xmla> <xmlD> <XMLC>: 这些都是不正确的
+
+		- xml的标签不能包含空格和冒号
+			<a b> <b:c> : 这些是不对的
+
+6、xml中属性的定义
+	(1)属性定义的要求:
+		- 一个标签上可以有多个属性
+			<person id1="aaa" id2="bbb"></person>
+
+		- 属性名称不能相同
+
+		- 属性名称和属性值之间使用=，属性值使用引号包起来(单引号或双引号)
+
+		- xml属性的名称规范和元素名称规范一致
+
+
+7、xml中的注释
+	<!-- 注释 -->
+	(1)注释不能嵌套
+		<!-- <!-- <sex>nv</sex>--> -->
+
+
+8、xml中的特殊字符
+	(1) < 为 &lt;
+
+	(2) > 为 &gt;
+
+	(3) & 为 &amp;
+
+	(4) " 为 &quot;
+
+	(5) ' 为 &apos;
+
+
+9、CDATA区
+	(1) 解决频繁出现多个字符都需要转移的操作 if (a<b && b<c && d>f) ()
+	
+	(2) 把这些内容放到CDATA区里面，不需要转义了
+
+	(3)格式
+		<![CDATA [内容]]>
+		<![CDATA[ <b>if(a<b && b<c && d<e) () </b>]]>
+
+	(3)把特殊字符当成文本，不是标签
+
+
+10、PI指令(处理指令)
+	(1)可以在xml中设置样式
+
+	(2)xml-stylesheet指令:
+	代码:
+	<?xml-stylesheet type="text/css" href="1.css"?>
+	(1)注意: 对中文标签不起作用，只能对英文的标签名称起作用
+
+
+
+11、xml的约束简介
+	(1)为什么需要约束?
+		- 如现在定义一个person的xml文件，只想要这个文件里面保存人的信息
+
+	(2) xml约束的技术: dtd约束 和 schema约束
+
+
+12、dtd的快速入门
+	(1) 创建一个文件，后缀名为 .dtd
+
+	(2) 步骤:
+			- 看xml中有多少个元素
+				有几个元素，写几个<!ELELMENT>
+
+			- 判断元素是简单元素还是复杂元素
+				-- 简单元素: 没有子元素
+					<!ELEMENT 元素名称 (#PCDATA)>				
+					<!ELEMENT name (#PCDATA)>
+
+				-- 复杂元素: 有子元素的元素
+					<!ELEMENT 元素名称 (子元素)>
+					<!ELEMENT person(name, age)>
+
+			- 需要在xml文件中引入dtd文件
+				<DOCTYPE 根元素的名称 SYSTEM "dtd文件的路径">
+				<!DOCTYPE person SYSTEM "1.dtd">
+
+	(3) 打开xml文件使用浏览器打开的，浏览器只负责校验xml的语法，而不负责校验约束。使用工具校验xml(myeclipse)
+
+
+13、dtd的三种引入方式
+	(1)引入外部的dtd文件
+		<!DOCTYPE 根元素的名称 SYSTEM "dtd路径">
+
+	(2)使用内部的dtd文件
+		<!DOCTYPE person [
+	        <!ELEMENT person (name, age)>
+	        <!ELEMENT name (#PCDATA)>
+	        <!ELEMENT age (#PCDATA)>
+	        ]>
+
+    (3)使用外部的dtd文件(网络上的dtd文件)
+    	<!DOCTYPE 根元素 PUBLIC "DTD名称" "DTD文档的URL">
+    	- 后面的框架 structs2 使用配置文件
+
+
+14、使用dtd定义元素
+	(1) 语法 <!ELEMENT 元素名 约束>
+
+	(2)简单元素: 没有子元素的元素
+		<!ELEMENT name (#PCDATA)>
+			- #PCDATA: 约束name是字符串类型
+
+			- EMPTY: 元素为空(没有内容)
+				<!ELEMENT sex EMPTY>
+				<sex></sex>
+			
+			- ANY: 任意元素
+
+	(3)复杂元素:
+		<!ELEMENT 元素名称 (子元素)>
+			子元素只能出现一次
+
+		表示子元素出现的次数:
+			+ : 表示一次或者多次，至少一次
+			? : 表示零次或者一次，至多一次
+			* : 表示零次或者多次，任意多次
+
+		- 子元素之间使用逗号(,)进行隔开
+			-- 表示元素出现的顺序
+
+		- 子元素直接使用 | 隔开
+			-- 表示元素只能出现其中范围的任意一个
+
+
+15、使用dtd定义属性
+	(1) 语法: <!ATTLIST 元素名称
+					属性名称 属性类型 属性的约束
+			 >
+
+		代码:
+	        <!ATTLIST birthday
+	                ID1 CDATA #REQUIRED
+	                >
+	        ]>
+
+	(2)属性类型:
+		- CDATA: 字符串
+
+		- ENUMERATED: 枚举类型(只能在一定的范围内出现值，但是只能每次出现其中的一个)
+			-- (aa|bb|cc)
+
+		代码:
+        <!ATTLIST age
+                ID2 (AA|BB|CC) #REQUIRED
+                >
+
+        - ID: 表示属性的取值只能字母或者下划线开头
+
+         代码:
+          <!ATTLIST name
+                ID3 ID #REQUIRED
+                >
+
+    (3)属性的约束:
+    	- #REQUIRE: 表示属性必须存在
+
+    	- #IMPLIED: 表示属性可有可无
+
+    	代码:
+    		<!ATTLIST birthday
+                ID1 CDATA #IMPLIED
+                >
+
+        - #FIXED: 表示一个固定值 #FIXED "AAA"
+        	- 属性的值必须是设置的这个固定值
+
+        代码:
+			<!ATTLIST sex
+			            ID4 CDATA #FIXED "ABC"
+			        >
+		- 默认值:
+	  		<!ATTLIST birthday
+	                ID1 CDATA "AAA"
+	                >
+
+
+16、实体的定义
+	(1)语法: <!ENTITY 实体名称 "实体的值">
+
+	(2) <!entity TEST "HAHAHEHE">
+
+	(3) 使用实体 
+		- &实体名称; 比如 &TEST;
+
+	(4) 代码:
+		<!ENTITY TEST "HAHAHEHE">
+		<name ID3="ab">&TEST;</name>
+
+	(5)注意:
+		- 定义的实体需要写在内部的dtd里面，如果写在外部的dtd里面，有某些浏览器下，内容得不到
+
+
+17、xml解析的简介(写到java代码)
+	(1)xml 是标记型文档
+
+	(2)js使用dom解析标记型文档
+		- 根据html的层级结构，在内存中分配一个树形结构，把html的标签，属性，文本都封装成对象 
+		- document对象、element对象、属性对象、文本对象、Node节点对象
+
+	(3)xml的解析方式(两种): dom 和 sax
+		- 使用dom解析xml时，缺点: 如果文件过大，容易造成内存溢出。
+			-- 优点: 增删改操作方便
+
+		- sax解析过程: 采用事件驱动，边读边解析
+			-- 从上到下，一行一行的解析，解析到某一个对象，把对象名称返回
+			优点： 使用sax方式不会造成内存溢出，实现查询
+
+			-- 使用sax方式不能实现增删改操作
+
+
+	(4)想要解析xml，首先需要解析器:
+		不同的公司和组织提供了针对dom和sax方式的解析器，通过api方式提供
+		- sun公司提供了针对dom和sax解析器: jaxp
+		- dom4j组织，针对dom和sax解析器: dom4j(实际开发中使用得最多的)
+		- jdom组织，针对dom和sax解析器: jdom
+
+10、jaxp的api的查看
+	(1) jaxp是javase的一部分
+
+	(2) jaxp解析器在jdk的javax.xml.parsers包里面
+		- 四个类: 分别是针对dom和sax解析使用的类
+		- dom:
+			DocumentBuilder: 解析器类
+				- 这个类是抽象类，不能实例化，此类的实例可以使用DocuentBuilderFactory.newDocumentBuilder()方法获取
+
+				- parse(File f):一个方法，可以解析xml，返回的是Document整个文档
+				- 返回的document是一个接口，父节点是Node，如果在document里面找不到想要的方法，到Node里面找
+
+				- 在document里面方法:
+
+				- getElementByTagName(String tagname)
+					-- 这个方法可以得到标签
+					-- 返回集合NodeList
+
+				- createElement(String tagName)
+					-- 创建标签
+
+				- createTextNode(String data)
+					-- 创建文本
+
+				Node方法
+				- appendChild(Node newChild)
+					-- 把文本添加到标签下面
+
+				- removeCHild(Node oldChild)
+					-- 删除节点
+
+				- getParentNode()
+					-- 获取父节点
+
+				NodeList方法:
+					- getLength(): 得到集合的长度
+					- item(index): 通过下标取得具体的值
+
+			DocumentBuilderFactory: 解析器工厂
+				- 这个类也是抽象类，不能实例化，此类的实例可以使用DocumentBuilderFactory.newInstance()获取DocumentBuilderFactory类
+		- sax:
+			SAXParser: 解析器类
+			SAXParserFactory: 
+
+
+19、使用jasp实现查询操作
+
+	(1)查询xml中所有的name元素的值
+
+package cn.itcast.jaxptest;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.*;
+import java.io.IOException;
+
+/**
+ * 实现jaxp操作xml
+ * @author DevinKin
+ */
+public class TestJaxp {
+    public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
+        // 查询所有name元素的值
+        /**
+         * 1. 创建解析器工厂
+         * 2. 根据解析器工厂创建解析器
+         * 3. 解析xml返回document
+         * 4. 得到所有的name元素
+         * 5. 返回集合，便利集合，得到每一个name元素
+         */
+
+        // 创建解析器工厂
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+
+        // 根据解析器工厂创建解析器
+        DocumentBuilder builder = builderFactory.newDocumentBuilder();
+
+        // 解析xml返回document
+        Document document = builder.parse("src/person.xml");
+
+        // 得到name元素
+        NodeList list = document.getElementsByTagName("name");
+
+        for (int i = 0; i < list.getLength(); i++)
+        {
+            Node name1 = list.item(i);
+
+            // 得到name元素里面的值
+            System.out.println(name1.getTextContent());
+        }
+    }
+}
+
+	(2)查询xml中第一个name元素的值
+		Node name1 = list.item(1);
+
+
+20、使用jasp添加一个节点
+	- 需求: 在第一个<p1>下面添加<sex>nv</nv>
+
+	public static void addSex() throws Exception {
+        /**
+         * 1. 创建解析器工厂
+         * 2. 根据解析器工厂创建解析器
+         * 3. 解析xml，返回document
+         *
+         * 4. 得到第一个p1
+         * 5. 创建sex标签createElement
+         * 6. 创建文本createTextNode
+         * 7. 把文本添加到sex下面appendChild
+         * 8. 把sex添加到第一个p1下面
+         * 9. 回写xml
+         */
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+
+        DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
+
+        Document document = documentBuilder.parse("src/person.xml");
+
+        NodeList list = document.getElementsByTagName("p1");
+        Node node = list.item(0);
+        Node newNode = document.createElement("sex");
+        Node text = document.createTextNode("nv");
+        newNode.appendChild(text);
+        node.appendChild(newNode);
+
+        // 回写xml
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.transform(new DOMSource(document), new StreamResult("src/person.xml"));
+    }
+
+
+21、使用jaxp修改节点
+	- 需求: 修改<sex>nv</sex>里面的内容为nan
+   public static void modifitySex() throws Exception {
+        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+
+        DocumentBuilder documentBuilder = builderFactory.newDocumentBuilder();
+
+        Document document = documentBuilder.parse("src/person.xml");
+
+        Node sexNode = document.getElementsByTagName("sex").item(0);
+        sexNode.setTextContent("nan");
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+
+        transformer.transform(new DOMSource(document), new StreamResult("src/person.xml"));
+    }
+
+
+22、使用jaxp删除节点
+	- 需求: 删除<sex>节点
+    public static void removeSex() throws Exception {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+
+        Document document = documentBuilder.parse("src/person.xml");
+
+
+        Node sexNode = document.getElementsByTagName("sex").item(0);
+
+        Node firstp1Node = sexNode.getParentNode();
+        firstp1Node.removeChild(sexNode);
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+
+        transformer.transform(new DOMSource(document), new StreamResult("src/person.xml"));
+
+    }
+
+
+23、使用jaxp遍历节点
+	-需求: 把xml中所有的元素名称打印出来(注意，解析xml时候会将空格，换行都遍历出来)
+    /**
+     * 打印所有元素
+     * @throws Exception
+     */
+    public static void printAll() throws Exception {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+
+        Document document = documentBuilder.parse("src/person.xml");
+
+        list1(document);
+    }
+
+    private static void list1(Node node) {
+        if (node.getNodeType() == Node.ELEMENT_NODE)
+            System.out.println(node.getNodeName());
+        NodeList list = node.getChildNodes();
+
+        for (int i = 0; i < list.getLength(); i++) {
+            Node node1 = list.item(i);
+            list1(node1);
+        }
+    }
+

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML实例</title>
+</head>
+<body>
+	<script type="text/javascript">
+		// 获取当前时间
+		var date = new Date();
+		document.write(date);
+
+		// 转换成习惯的格式
+		document.write("<hr/>");
+		document.write(date.toLocaleString());
+
+		// 获取当前年方法
+		document.write("<hr/>");
+		document.write(date.getFullYear());
+
+		// 获取当前月方法
+		document.write("<hr/>");
+		document.write(date.getMonth());
+
+		// 获取当前星期
+		document.write("<hr/>");
+		document.write(date.getDay());
+
+		// 获取当前天
+		document.write("<hr/>");
+		document.write(date.getDate());
+
+		// 获取当前的小时
+		document.write("<hr/>");
+		document.write(date.getHours());	
+
+		// 获取当前分钟
+		document.write("<hr/>");
+		document.write("minutes: " + date.getMinutes());
+
+		// getSeconds
+		document.write("<hr/>");
+		document.write("seconds: " + date.getSeconds());
+
+		// 获取毫秒数
+		document.write("<hr/>");
+		document.write("ms: " + date.getTime());
+	</script>
+</body>
+</html>

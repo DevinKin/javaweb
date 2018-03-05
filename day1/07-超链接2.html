@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML实例</title>
+</head>
+<body>
+	<a name="top">顶部</a>
+	<pre>
+		
+huhaibo
+huhaibo2 年前
+搜索安装包 搜不到 SyncedSidebarBg 怎么破，我的是 sublime 2 ，是不支持吗
+赞回复踩举报
+Stephen Zhao
+Stephen Zhao (作者) 回复huhaibo2 年前
+没错，确实是 ST3 独占。
+赞查看对话回复踩举报
+Wayne
+Wayne9 个月前
+选中，行号前面的点怎么设置
+
+赞回复踩举报
+Stephen Zhao
+Stephen Zhao (作者) 回复Wayne9 个月前
+那个其实是语法检查扩展 SublimeLinter 框架，配合其插件 SublimeLinter-jshint 实现 Javascript 语法检查的（类似的还有 SublimeLinter-csslint 或 SublimeLinter-contrib-htmlhint）效果。这个需要进行相关配置（根据扩展官网说明），还要装 Node.js。
+
+赞查看对话回复踩举报
+Wayne
+Wayne回复Stephen Zhao (作者) 9 个月前
+谢谢
+赞查看对话回复踩举报
+火星有火
+火星有火8 个月前
+boxy主题确实不错 刚刚用过
+
+赞回复踩举报
+欧根欧根欧
+欧根欧根欧5 个月前
+下载安装好了，侧边栏还是无法改变颜色样式，但是配色方案会出现
+
+赞回复踩举报
+单志永
+单志永回复欧根欧根欧5 个月前
+我也是 你的好了吗
+
+赞查看对话回复踩举报
+Stephen Zhao
+Stephen Zhao (作者) 回复欧根欧根欧5 个月前
+如果你说的是文件类型的图标样式，那是因为需要打开工程文件夹才有，打开单个文件是只有文件名称的。
+
+赞查看对话回复踩举报
+Stephen Zhao
+Stephen Zhao (作者) 回复单志永5 个月前
+这是完整主题插件，需要同时改主题（Theme）和配色方案（Color Scheme）才会生效
+
+赞查看对话回复踩举报
+兰東公子
+兰東公子5 个月前
+Preferences --> Package Settings --> Boxy Theme --> Configuration是灰色的，无法点啊
+
+赞回复踩举报
+悟空
+悟空2 个月前
+请问，如何让侧边栏一直固定存在啊？现在是只有鼠标移到最左边才会出现，但是维持不了多久，就自动隐藏了
+赞回复踩举报
+xuleqing
+xuleqing1 个月前
+下载不了，半天没反应
+
+赞回复踩举报
+收起评论
+写下你的评论...
+
+评论
+知乎用户
+知乎用户
+猿
+6 人赞同了该回答
+嫌侧边栏太丑，就搜到了这，在别处解决后来回复下我的解决方案（答案有点跑题）。
+
+正题：
+
+改进前的样子（着重在：侧边栏和文件栏）：
+
+
+
+改进后的样子：
+
+
+
+可以看到改进后的效果。
+
+具体操作：
+
+1.Ctrl+Shift+P -> install package--"theme-Afterglow"
+
+2.安装完成后，修改preferences--setting，贴一下具体配置，最主要配置就是添加“theme”
+
+{
+	"color_inactive_tabs": true,  //编辑区文件栏的样式
+	"color_scheme": "Packages/Babel/Monokai Phoenix.tmTheme",//编辑区主题样式（可以和侧边栏不同）
+	"enable_highlight": true,
+	"enable_mathjax": true,
+	"font_face": "YaHei Consolas Hybrid",
+	"font_size": 14,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"line_padding_bottom": 1, //编辑区的上下行距
+	"line_padding_top": 1,
+	"tabs_small": true,  //编辑区文件栏的大小
+	"theme": "Afterglow.sublime-theme",   //侧边栏的主题样式
+	"update_check": false
+}
+编辑于 2017-04-27
+6
+​收起评论
+​分享
+​收藏​感谢收起
+2 条评论
+​切换为时间排序
+知乎用户知乎用户 (作者) 回复Stephen Zhao9 个月前
+可以的呀， color_scheme 这个参数我标注了，不影响编辑区的主题使用（随便调选主题）。侧边栏的字体大小等等样式也可以通过 opensource来修改。
+
+赞查看对话回复踩举报
+知乎用户知乎用户 (作者) 回复Stephen Zhao9 个月前
+安装插件，修改theme了吗？且修改后样式没有任何异样？比如侧边栏黑掉？还有如果没反应且正常的话，打开setting仍可以看到新加的参数嘛？
+赞查看对话回复踩举报
+写下你的评论...
+
+评论
+S zheng
+S zheng
+http://github.com/wilon
+2 人赞同了该回答
+你改的是配色方案，主题样式并没改动。
+
+Soda Theme - Dark and light custom UI themes for Sublime Text
+题主可以安装这个主题，自己改改试试。\Data\Packages\Theme - Soda\下边的文件。
+用户配置主题："theme": "Soda Light 3.sublime-theme",
+打开主题文件配置背景：
+    {
+        "class": "sidebar_container",
+        "layer0.texture": "Theme - Soda/Soda Dark/sidebar-bg.png",  // 背景图片
+        "layer0.opacity": 1.0,
+        "layer0.inner_margin": [1, 1, 2, 1],
+        "content_margin": [0, 0, 1, 0]
+    },
+发布于 2015-03-21
+2
+​3 条评论
+​分享
+​收藏​感谢
+xgqfrms
+xgqfrms
+software engineer
+3 人赞同了该回答
+
+Ctrl+Shift+P -> install -> 搜索安装包 SyncedSidebarBg，自动同步侧边栏底色为编辑窗口底色。
+the full dark is too ugly!
+
+
+# it should be this!
+
+编辑于 2016-11-21
+3
+​4 条评论
+​分享
+​收藏​感谢收起
+胡佳睿
+胡佳睿
+写代码的通信汪
+1 人赞同了该回答
+在user setting里添上以下两句，是我个人的配色方案，改了theme，侧边栏就会变了
+
+"theme": "Material-Theme-Darker.sublime-theme",
+
+"color_scheme": "Packages/Colorsublime - Themes/Monokai.tmTheme",
+
+发布于 2017-04-26
+1
+​添加评论
+​分享
+​收藏​感谢
+何阳
+何阳
+一只不懂程序的程序员猿
+
+为什么我按你的方法 ，怎么是这样的？
+
+发布于 2017-03-30
+0
+​2 条评论
+​分享
+​收藏​感谢
+写回答
+
+	</pre>
+	<a href="#top">回到顶部</a>
+</body>
+</html>

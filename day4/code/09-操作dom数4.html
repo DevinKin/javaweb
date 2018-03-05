@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title></title>
+	<style type="text/css">
+		
+	</style>
+</head>
+<body>
+	<ul id="ulid">
+		<li id="li31">小黄</li>
+		<li id="li32">老王</li>
+		<li id="li33">王昭君</li>
+		<li id="li34">貂蝉</li>
+	</ul>
+	<input type="button" value="replace" onclick="replace();"/>
+</body>
+	<script type="text/javascript">
+		function replace() {
+			var ul31 = document.getElementById("ulid"); 
+			var li32 = document.getElementById("li32");
+			var nli32 = document.createElement("li");
+			var text32 = document.createTextNode("隔壁老王");
+			nli32.appendChild(text32);
+			ul31.replaceChild(nli32, li32);
+		}
+	</script>
+</html>

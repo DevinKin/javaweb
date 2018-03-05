@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML实例</title>
+</head>
+<body>
+	<!--<input type="button" value="open" onclick="open1();">
+	-->
+	<input type="button" value="interval" onclick="clear1();"/>
+	<input type="button" value="timeout" onclick="clear2();"/>
+	<script type="text/javascript">
+		// 演示confirm 方法
+		//window.confirm("是否删除?");
+
+		// 演示 prompt 方法
+		//window.prompt("请输入： ", "0");
+		
+		// open 方法
+		function open1() {
+			window.open("http://www.baidu.com","", "width=200,height =100");
+		}
+
+		//window.close();
+		var id1 = window.setInterval("alert('123')", 3000);
+		var id2 = window.setTimeout("alert('abc')", 4000);
+		
+
+		function clear1()
+		{
+			clearInterval(id1);
+		}
+		function clear2() {
+			clearTimeout(id2);
+		}
+	</script>
+</body>
+</html>

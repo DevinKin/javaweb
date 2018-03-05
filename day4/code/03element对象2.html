@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML实例</title>
+	<style type="text/css">
+		
+	</style>
+</head>
+<body>
+	<ul id="ulid">
+		<li>aaaaaa</li>
+		<li>bbbbbb</li>
+		<li>cccccc</li>
+	</ul>
+</body>
+	<script type="text/javascript">
+		// 获取到ul下面的所有子标签(子元素)
+		// 获取ul标签
+		var ul1 = document.getElementById("ulid");
+
+		// 获取ul下面的子标签
+		//var lis = ul1.childNodes;
+		//alert(lis.length);
+		var lis = ul1.getElementsByTagName("li");
+		alert(lis.length);
+	</script>
+</html>

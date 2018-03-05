@@ -1,0 +1,342 @@
+1、Servlet概述
+	(1)Servlet是Javaweb三大组件之一，它属于动态资源。Servlet的作用是处理请求，服务器会把接收到的请求交给Servlet来处理，在Servlet通常需要
+		- 接受请求数据
+		- 处理请求
+		- 完成响应
+
+
+	(2)每个Servlet都是唯一的，他们能处理的请求是不同的
+
+
+2、实现Servlet的方式:
+	(1)实现javax.servlet.Servlet接口
+
+	(2)继承javax.servlet.GenericServlet类
+
+	(3)继承javax.servlet.http.HttpServlet类
+
+	(4)Servlet.java
+	public interface Servlet {
+		public void init(ServletConfig config) throws ServletException;
+
+		public ServletConfig getServletConfig();
+
+		public void service(ServletRequest req, ServletResponse res)
+			throws ServletException,IOException;
+
+		public String getServletInfo();
+
+		public void destroy();
+	}
+
+	(5)Servlet大多数方法不由我们来调用，而是由Tomcat来调用
+
+	(6)Servlet的对象也不是由我们创建，而是Tomcat创建
+
+
+
+3、如何让浏览器访问Servlet
+	(1)给Servlet指定一个Servlet路径(让Servlet与一个路径绑定在一起)
+
+	(2)浏览器访问Servlet路径
+
+	(3)给Servlet配置Servlet路径，这需要在web.xml里面对Servlet进行配置
+
+	(4)web.xml的配置方式
+		<servlet>
+			<servlet-name>XXX</servlet-name>
+			<servlet-class>cn.itcast.web.servlet.AServlet</servlet-class>
+		</servlet>
+
+		<servlet-mapping>
+			<servlet-name>XXX</servlet-name>
+			<url-pattern>/AServlet</url-pattern>
+		</servlet-mapping>
+
+	(5)servlet-name表示servlet的名字，与<servlet-mapping>标签中的servlet-name名字
+	对应使用。
+
+	(6)url-pattern表示在浏览器下输入的地址，即可访问XXX名字对应的servlet-class的
+	servlet。
+
+	(7)servlet的destory方法一般在服务器关闭的时候执行
+
+	(8)特性:
+		a. 单例，一个类只有一个对象，当然可能存在多个Servlet类
+		b. 线程不安全，所以它的效率高。
+
+	(9)Servlet类由我们来写，但对象由服务器来创建，并由服务器创建相应的方法
+
+
+4、一个ServletConfig对象对应一段web.xml中Servlet的配置信息
+	(1)String getServletName(): 获取的是<servlet-name>中的内容
+
+	(2)ServletContext getServletContext(): 获取Servlet上下文对象
+
+	(3)String getinitParameter(String name): 通过指定名称得到初始化参数的值
+
+	(4)Enumeration getInitParameterNames(): 获得所有初始化参数的名称
+
+	(5)上面个两个方法得到web.xml下面内容的参数
+		<init-param>
+			<param-name>p1</param-name>
+			<param-value>v1</param-value>
+	  	</init-param>
+
+
+5、GenericServlet类
+	(1)覆盖init()方法
+
+
+6、HttpServlet类
+	(1)HttpServlet extends GenericServlet {
+		void service(ServletRequest, ServletResponse)----->生命周期方法
+		* 强制转换过两个参数为http协议相关的类型
+		* 调用本类的service(HttpServletRequest, HttpServletResponse)
+	
+		//不是生命周期方法
+		void service(HttpServletRequest, HttpServletResponse);
+		*它会通过request得到当前请求的请求方式，例如：Get或POST
+
+		*根据请求方式再调用doGet()或者doPost()
+
+		void dogGet() {...}	--> 重写
+
+		void doPost() {...}	--> 重写
+	}
+
+	(2)如果你没有覆盖doGet或doPost，并且它们被调用了，那么会出现405，表示不支持该请求方式
+
+
+7、Servlet与线程安全
+	(1)(入门)不要Servlet中创建成员，创建局部变量即可
+
+	(2)可以创建无状态成员，状态必须是只读的
+
+	(3)所谓状态就是类的对象成员
+
+
+8、让服务器在启动时就创建Servlet
+	(1)方法:
+		在web.xml中对Servlet进行配置即可:
+		<load-on-stratup>非负整数#</load-on-stratup>
+
+	(2)服务器启动Servlet顺序:
+		#小的先创建，大的后创建
+
+	(3)例:
+    <servlet>
+        <servlet-name>ZZZ</servlet-name>
+        <servlet-class>cn.itcast.servlet.FServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ZZZ</servlet-name>
+        <url-pattern>/FServlet</url-pattern>
+    </servlet-mapping>
+
+
+9、<url-pattern>的写法
+	(1)一个<servlet-mapping>中给出多个<url-pattern>
+    <servlet-mapping>
+        <servlet-name>ZZZ</servlet-name>
+        <url-pattern>/AServlet</url-pattern>
+        <url-pattern>/BServlet</url-pattern>
+        <url-pattern>/CServlet</url-pattern>
+    </servlet-mapping>
+
+    (2)在配置路径中给出通配符
+    	-路径匹配
+    	<url-pattern>/servlet/*</url-pattern>: /servlet/a /servlet/b
+    	-扩展名匹配
+    	<url-pattern>*.do</url-pattern>: /abc/def/gh.do /a.do
+    	-所有匹配
+    	<url-pattern>/*</url-pattern>: 匹配所有的URL
+
+    	* 只能出现在两边，不能放在中间
+
+    	-匹配得多，优先级低
+
+
+9、web.xml文件的继承
+	(1)在conf/web.xml中的内容，相当于写到了每个项目的web.xml中，它是所有web.xml的父文件
+
+	   <servlet-mapping>                          
+ 	         <servlet-name>default</servlet-name>                   
+	         <url-pattern>/</url-pattern>                                
+ 		 </servlet-mapping> 
+
+ 	(2)它的优先级最低，如果一个请求没有人处理，那么它来处理，它显示404
+ 		当访问路径不存在时，会执行该Servlet。访问index.html其实也是访问这个
+
+
+ 	(3)超时时间30分钟
+    <session-config>                                                         	<session-timeout>30</session-timeout> 
+ 	 </session-config> 
+
+
+10、ServletContext
+	(1)一个项目只有一个ServContext对象!application
+
+	(2)我们可以在N多个Servlet中来获取这个唯一的对象，使用它可以给多个Servlet传递数据
+
+	(3)这个对象在Tomcat启动时就创建，在Tomcat关闭时才销毁
+
+
+11、ServletContext域对象的功能
+	(1)ServletContext是javaweb四大域对象之一
+		- PageContext
+		- ServletRequest
+		- HttpSession
+		- ServletContext
+
+	(2)域对象就是用来在多个Servlet中传递数据
+
+	(3)域对象必须有存数据和取数据的功能
+
+	(3)域对象内部其实有一个Map，用来存储数据
+
+	(4)ServletContext对象操作数据的方法
+		void setAttribute(String name, Object value);
+		Object getAttribute(String name);
+		void removeAttribute(String name);
+		Enumeration getAttributeNames();
+
+
+12、获取应用初始化参数
+	(1)Servlet也可以获取初始化参数，但是它是局部参数，也就是说，一个Servlet只能获取自己的初始化参数，不能获取别的Servlet的初始化参数，即Servlet初始化参数只为一个人配置
+
+	(2)可以配置公共的初始化参数为所有的Servlet而用，这就要使用ServletContext才能使用
+
+	(3)web.xml的配置
+	<context-param>
+		<param-name>paramName</param-name>
+		<param-value>paramValue</param-value>
+	</context-param>
+
+
+13、ServletContext获取相关的资源方法
+	(1)代码:
+	/**
+	 * 使用ServletContext获取资源路径
+	 * @author devinkin
+	 */
+	@WebServlet(name = "JServlet")
+	public class JServlet extends HttpServlet {
+	    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	        /**
+	         * 它得到的是有盘符的路径: /home/share/xxx/xxx/xxx/
+	         */
+	        String path = this.getServletContext().getRealPath("/index.jsp");
+	        System.out.println(path);
+	    }
+	}
+
+	(2)结果
+	/home/king/javaweb/day09/out/artifacts/Servlet_war_exploded/index.jsp
+
+
+14、获取资源流
+	(1)代码:
+	public class JServlet extends HttpServlet {
+	    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	        /**
+	         * 它得到的是有盘符的路径: /home/share/xxx/xxx/xxx/
+	         */
+	        String path = this.getServletContext().getRealPath("/index.jsp");
+	        System.out.println(path);
+
+	        InputStream inputStream = this.getServletContext().getResourceAsStream(path);
+	    }
+
+
+15、获取目录下所有资源路径
+	(1)如获取/WEB-INFO下所有资源路径
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        /**
+         * 它得到的是有盘符的路径: /home/share/xxx/xxx/xxx/
+         */
+        String path = this.getServletContext().getRealPath("/index.jsp");
+        System.out.println(path);
+
+        InputStream inputStream = this.getServletContext().getResourceAsStream(path);
+
+        Set paths = this.getServletContext().getResourcePaths("/WEB-INF");
+        System.out.println(paths);
+    }
+
+    (2)结果
+    	[/WEB-INF/lib/, /WEB-INF/classes/, /WEB-INF/web.xml]
+
+
+16、练习：访问量统计
+	(1)一个项目中所有的资源被访问都要对访问量进行累加
+
+	(2)创建一个int类型的变量，用来保存访问量，然后把它保存到ServletContext的域中，这样就可以保存所有的Servlet都可以访问到
+
+	(3)分析
+		- 最初始，ServletContext中没有保存访问量相关的属性
+
+		- 当本站第一次被访问，创建一个变量，设置其值为1，保存到ServletContext中
+
+		- 以后的访问时，就可以从ServletContext中获取这个变量，然后在其基础上加1
+
+		- 获取ServletContext对象，查看是否存在名为count的属性，如果存在，说明不是第一次访问，如果不能存在，说明是第一次访问。
+			-- 第一次访问，调用ServletContext的setAttribute()传递一个属性，名为count，值为1.
+			-- 第二到第n次访问，调用ServletContext()的getAttribute()方法获取原来的访问量，给访问量加1，再调用ServletContext的setAttribute()方法完成设置
+
+	(4)代码:
+        /**
+         * 1. 获取ServletContext对象
+         * 2. 从ServletContext对象中获取名为count的属性
+         * 3. 如果存在,给访问量加1,然后保存回去;
+         * 4. 如果不存在，说明是第一次访问，向ServletContext中保存名为count的属性,值为
+         */
+        ServletContext app = this.getServletContext();
+        Integer count = (Integer)app.getAttribute("count");
+        if (count == null) {
+            app.setAttribute("count", 1);
+        } else {
+            app.setAttribute("count", count + 1);
+        }
+
+        /**
+         * 向浏览器输出
+         * 需要使用相应对象
+         */
+        PrintWriter pw = resp.getWriter();
+        pw.print("<h1>" + count + "</h1>");
+
+17、获取类路径下的资源
+	(1)获取类路径资源，类路径对一个javaweb项目而言就是/WEB-INF/classes和/WEB-INFO/lib/jar包
+
+	(2)Class: 获取当前.class文件所在目录 或 相对classes目录下
+
+	(3)ClassLoader: 获取/classes目录,此处为src目录
+
+	(4)代码:
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        /**
+         * 1. 得到classLoader
+         *  - 先得到Class,再得到ClassLoader
+         * 2. 调用其getResourceAsStream(),得到一个InputStream
+         * 3.
+         */
+        //相当于src目录,相对/classes
+        //ClassLoader cl = this.getClass().getClassLoader();
+        //InputStream input = cl.getResourceAsStream("cn/itcast/a.txt");
+
+        //相当于当前LServlet.class所在目录
+        Class c = this.getClass();
+        //InputStream input = c.getResourceAsStream("a.txt");
+
+        // 相对classes下
+        //InputStream input = c.getResourceAsStream("/a.txt");
+
+        // 获取index.jsp文件
+        InputStream input = c.getResourceAsStream("/../../index.jsp");
+
+        String s = IOUtils.toString(input);
+        System.out.println(s);
+    }

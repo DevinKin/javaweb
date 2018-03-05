@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>HTML实例</title>
+	<style type="text/css">
+		
+	</style>
+</head>
+<body>
+	<ul id="ulid">
+		<li id="li11">小黄</li>
+		<li id="li12">老王</li>
+		<li id="li13">王昭君</li>
+		<li id="li14">貂蝉</li>
+	</ul>
+
+	<input type="button" value="remove" onclick="remove();">
+</body>
+	<script type="text/javascript">
+		function remove() {
+			var li14 = document.getElementById("li14");
+			var ul1 = document.getElementById("ulid");
+			ul1.removeChild(li14);
+
+		}
+	</script>
+</html>

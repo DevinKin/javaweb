@@ -1,0 +1,375 @@
+1、数据库的发展历程
+	(1)没有数据库，使用磁盘文件存储数据
+	(2)层次结构模型数据库
+	(3)网状结构模型数据库
+	(4)关系结构模型数据库：使用二维表格来存储数据
+	(5)关系-对象模型数据库
+
+	(6)MySQL就是关系型数据库
+
+2、常见数据库
+	(1)Oracle：甲骨文(市场占有率最高！)
+
+	(2)DB2：IBM
+
+	(3)SQL Server：微软
+
+	(4)Sybase：赛尔斯
+
+	(5)MySQL：甲骨文
+
+
+3、RDBMS - Relational database management system(关系型数据库管理系统)
+	(1)RDBMS = 管理员(manager) + 仓库(database)
+
+	(2)database = N个table
+
+	(3)table:
+		表结构：定义表的列名和列类型
+		表记录：一行一行的记录
+
+
+4、登录服务器： mysql -uroot -p123 -h locahost
+	-u: 后面跟随用户名
+	-p: 后面跟随密码
+	-h: 后面跟随IP
+
+
+5、SQL
+	(1)什么是SQL：结构化查询语言(Structed Query Language)。
+
+	(2)SQL的作用：客户端使用SQL来操作服务器。
+
+	(3)SQL标准(例如SQL99,即1999年指定的标准)：
+		- 由国际标准化组织(ISO)制定的，对DBMS的统一操作方式(例如相同的语句可以操作：mysql、oracle)等
+
+	(4)SQL方言
+		- 某种 DBMS不只会支持SQL标准，而且还会有一些自己独有的语法，这就称为方言！例如
+		limit语句只在MySQL中可以使用
+
+
+6、SQL语法
+	(1)SQL语句可以在单行或多行书写，以分号结尾
+
+	(2)可使用空格和缩进来增强语句的可读性
+
+	(3)MySQL不区分大小写，建议使用大写
+
+
+7、SQL语句分类
+	(1)DDL(Data Definition Language): 数据定义语言，用来定义数据库对象！库、表、列等
+		- 创建、删除、修改：库表结构
+
+	(2)DML(Data Manipulation Language): 数据操作语言，用来定义数据库记录(数据)：
+		- 增、删、改：表记录
+
+	(3)DCL(Data Control Language)： 数据控制语言，用来定义访问权限和安全级别；
+
+	(4)DQL(Data Query Language): 数据查询语言，用来查询记录(数据);
+
+	(5)ddl：对数据库或表结构操作
+
+	(6)dml：对表的记录进行更新(增、删、改)
+
+	(7)dql：对表的记录的查询
+
+	(8)dcl：对用户的创建，及授权！
+
+
+一、DDL -> 对数据库或表结构操作
+
+1、数据库
+	(1)查看所有数据库：SHOW DATABASES
+
+	(2)切换(选择要操作的)数据库：USE 数据库名
+
+	(3)创建数据库：CREATE DATABASE [IF NOT EXISTS] mydb1 [CHARSET=utf-8]
+
+	(4)删除数据库：DROP DATABASE [IF EXISTS] mydb1
+
+	(5)修改数据库编码: ALTER DATABASE mydb1 CHARACTER SET utf8
+
+
+2、数据类型(列类型)
+	(1)int：整型
+
+	(2)double：浮点型，例如double(5,2)表示最多5位，其中必须有2位小数，即最大值999.99
+
+	(3)decimal：浮点型，在表示钱方面使用该类型，因为不会出现精度缺失问题
+
+	(4)char: 固定长度字符串类型：char(255)，数据的长度不足指定长度，补足到指定长度！
+
+	(5)varchar: 可变长度字符串类型； varchar(65535),zhangsan
+
+	(6)text(clob): 字符串类型:
+		- 很小:tinytext 2^8-1B
+		- 小:text 2^16-8B
+		- 中:mediumtext 2^24-1B
+		- 大:longtext 2^32-1B
+
+	(7)blob: 字节类型
+		- 很小:tinyblob 2^8-1B
+		- 小:blob 2^16-1B
+		- 中:mediumblob 2^24-1B
+		- 大:longblob 2^32-1B
+
+	(8)data: 日期类型，格式为: yyyy-MM-dd
+
+	(9)time: 时间类型，格式为: hh:mm:ss
+
+	(10)timestamp: 时间戳类型
+
+
+3、表
+	(1)创建表:
+		CREATE TABLE [IF NOT EXISTS] 表名 (
+			列名 列类型,
+			列名 列类型,
+			列名 列类型,
+			...
+			列名 列类型
+		)
+
+	(2)查看当前数据库中所有表的名称： SHOW TABLES;
+
+	(3)查看指定表的创建语句: SHOW CREATE TABLE 表名(了解);
+
+	(4)查看表结构： DESC 表名
+
+	(5)删除表： DROP TABLE 表名
+
+	(6)修改表： 前缀: ALTER TABLE 表名
+		- 修改之添加列：
+			ALTER TABLE 表名 ADD (
+				列名 列类型,
+				列名 列类型,
+				...
+			);
+
+		- 修改之修改列类型(如果被修改的列已经存在数据，那么新的类型可能会影响到已存在数据)
+			ALTER TABLE 表名 MODIFY 列名 列类型
+
+		- 修改之修改列名： ALTER TABLE 表名 CHANGE 原列名 新列名 列类型;
+
+		- 修改之删除列： ALTER TABLE 表名 DROP 列名
+
+		- 修改表名称： ALTER TABLE 原表名 RENAME TO 新表名
+
+
+二、DML -> 对表的记录进行更新(增、删、改)
+
+1、插入数据
+	(1)INSERT INTO 表名(列名1,列名2, ...) VALUES(列值1,列值2, ...);
+		- 在表名后给出要插入的列名，其他没有指定的列等同与插入null值。所以插入记录总是插入一行，不可能是半行。 
+
+		- 在VALUES后给出列值，值的顺序和个数必须与前面指定的列对应
+
+	(2)INSERT INTO 表名 VALUES(列值1,列值2)
+		- 没有给出要插入的列，那么表示插入所有列。
+
+		- 值的个数必须是该表列的个数。
+
+		- 值的顺序，必须与表创建时给出的列的顺序相同。
+
+2、修改表数据
+	(1)UPDATE 表名 SET 列名1=列值1, 列名2=列值2, ... [WHERE 条件]
+
+	(2)条件(条件可选的)：
+		- 条件必须是一个boolean类型的值或表达式
+			UPDATE t_person SET gender='男', age=age+1 WHERE sid='1';
+
+		- 运算符：=、!=、<>、>、<、>=、<=、BETWEEN..AND、IN(...)、IS NULL、NOT、OR、AND
+
+3、删除表数据
+	(1)DELETE FROM 表名 [WHERE 条件]；
+
+	(2)TRUNCATE TABLE 表名: TRUNCATE是DDL语句，它是先删除drop该表，而且无法回滚！
+
+
+4、数据库中所有字符串类型，必须使用单引号，不能使用双引号，日期类型也要用单引号。
+
+
+  
+三、DCL -> 对用户的创建，及授权！
+
+一个项目创建一个用户！一个项目对应的数据库只有一个！
+
+1、创建用户
+	(1) CREATE USER 用户名@IP地址 IDENTIFIED BY '密码';
+		- 用户只能在指定的IP地址上登录
+
+	(2) CREATE USER 用户名@'%' IDENTIFIED BY '密码';
+		- 用户可以在任意IP地址上登录
+
+
+2、给用户授权
+	(1)GRANT 权限1,...,权限n ON 数据库.* TO 用户名@IP地址
+		- 权限、用户、数据库
+
+		- 给用户分派在指定的数据库上指定的权限
+
+		- 例如:
+		GRANT CREATE,ALTER,DROP,INSERT,UPDATE,DELETE,SELECT ON mydb1.* TO user@localhost;
+			- 给user1用户分派在mydb1数据库上create、alter、drop、insert、update、delete、select权限
+
+		- GRANT ALL ON 数据库.* TO 用户名@IP地址
+			- 给用户分派指定数据库上的所有权限
+
+
+3、撤销权限
+	(1)REVOKE 权限1,...权限n ON 数据库.* FROM 用户名@IP地址
+		- 撤销指定用户在指定数据库上的指定权限
+		- 例如：REVOKE CREATE,ALTER,DROP ON mydb1.* FROM user@localhost;
+
+
+4、查看权限
+	(1)SHOW GRANTS FOR 用户名@IP地址
+		- 查看指定用户的权限
+
+
+5、删除用户
+	(1)DROP USER 用户名@IP地址
+
+
+
+四、DQL -> 对表的记录的查询
+
+
+1、基本查询
+	(1)字段(列)控制
+		1) 查询所有列
+			SELECT * FROM 表名;
+			SELECT * FROM emp;
+
+		2) 查询指定列
+			SELECT 列1 [, 列2, ... 列N] FROM 表名;
+			SELECT EMPNO, ename, sa1, comm FROM 表名;
+
+		3) 完全重复的记录只显示一次
+			当查询结果中的多行记录一模一样时，只显示一行，一般查询所有列时很少会有这种情况，但只查询一列(或几列)时，这总可能就大了！
+			SELECT DISTINCT * | 列1 [, 列2, ... 列N] FROM 表名；
+			SELECT DISTINCT sal FROM emp;
+
+			--> 查询员工表的工资，如果存在相同的工资只显示一次！
+
+		4) 列运算
+			a. 数量类型的列可以做加、减、乘、除运算
+				SELECT sal*1.5 FROM emp;
+				SELECT sal+comm FROM emp;
+
+			b. 字符串类型可以做连续运算
+				SELECT CONCAT('$', sal) FROM emp;
+
+			c. 转换NULL值
+				有时需要把NULL转换成其他值，例如com+1000时，如果com列存在NULL值，那么NULL+1000还是NULL，而我们这时希望把NULL当成0来运算。
+				SELECT IFNULL(comm,0)+1000 FROM emp;
+
+			d. 给列起别名
+				你也许已经注意到了，当使用列运算后，查询的结果集中的列名称很不好看，这时我们需要给列名起个别名，这样结果集中列名就显示别名了。
+				SELECT IFNULL(comm, 0)+1000  AS 奖金 FROM emp;
+				SELECT ename 姓名 job 工作 FROM emp;
+
+
+2、条件控制
+	1)条件查询
+		与前面介绍的UPDATE和DELETE语句一样，SELECT语句也可以使用WHERE子句来控制记录
+	SELECT empno,ename,sal,comm FROM emp WHERE sal > 10000 AND comm IS NOT NULL
+	SELECT empno,ename,sal FROM emp WHERE sal BETWEEN 20000 AND 30000;
+	SELECT empno,ename,job,FROM emp WHERE job IN('经理','分析师');
+
+	2)模糊查询
+		当你向查询姓张，并且名字一共两个字的员工时，就可以使用模糊查询了
+		SELECT * FROM emp WHERE ename LIKE '张_'; 
+
+		- 模糊查询需要使用运算符：LIKE，其中  
+		'_'匹配一个任意字符，注意，只匹配一个字符而不是多个字符。
+
+		/* 名字由三个字组成的员工 */
+		SELECT * FROM emp WHERE ename LIKE '___';
+
+		如果我们向查询姓张，名字几个字都可以的员工时就可以使用"%"了
+		SELECT * FROM emp WHERE LIKE '张%';
+			其中%匹配0-N个任意字符
+		SELECT * FROM emp WHERE ename LIKE '%阿%';
+
+		SELECT * FROM emp WHERE ename LIKE '%';
+			这个条件等同与不存在，如果姓名为NULL的查询不出来！
+
+
+3、排序
+	1)升序
+		SELECT * FROM emp WHERE ORDER BY sal ASC;
+
+		- ASC是可以省略的
+
+	2)降序
+		SELECT * FROM emp WHERE ORDER BY comm DESC;
+
+		- DESC不能省略
+
+	3)使用多列作为排序条件
+		SELECT * FROM emp WHERE ORDER BY sal ASC, comm DESC;
+		- 使用sal升序排序，如果sal相同时，使用comm的降序排序
+
+
+
+五、聚合函数
+
+聚合函数用来做某列的纵向运算。
+
+1、COUNT
+	SELECT COUNT(*) FROM emp;
+	- 计算emp表中所有列都不为NULL的记录的行数
+
+	SELECT COUNT(comm) FROM emp;
+	- 计算emp表中comm列不为NULL的记录的行数
+
+
+2、MAX
+	SELECT MAX(sal) FROM emp;
+	- 查询最高工资
+
+3、MIN
+	SELECT MIN(sal) FROM emp;
+	- 查询最低工资
+
+4、SUM
+	SELECT SUM(sal) FROM emp;
+	- 查询工资和
+
+5、AVG
+	SELECT AVG(sal) FROM emp;
+	- 查询平均工资
+
+
+
+六、分组查询
+
+1、分组查询是把记录使用某一列进行分组，然后查询组信息。
+	(1)例如：查看所有部门的记录数。
+	SELECT deptno, COUNT(*) FROM emp GROUP BY deptno;
+	--> 使用deptno分组，查询部门编号和每个部门的记录数
+
+	SELECT job,MAX(SAL) FROM emp GROUP BY job;
+	--> 使用job分组，查询每种工作的最高工资
+
+	(2)组条件，分组后条件
+	以部门分组，查询每组记录数，条件为记录数大于3
+	SELECT deptno, COUNT(*) FROM emp GROUP BY deptno HAVING COUNT(*) > 3;
+
+2、关键字执行顺序
+	SELECT
+	FROM
+	WHERE
+	GROUP BY
+	HAVING 
+	ORDER BY
+
+
+
+七、limit子句(方言)
+	(1)LIMIT用来限定查询结果的起始行，以及总行数。
+
+	(2)例如：查询起始行为第5行，一共查询3行记录
+	SELECT * FROM emp LIMIT 4, 3;
+	--> 其中4表示从第五行开始，其中表示一共查询3行，即5，6，7行记录

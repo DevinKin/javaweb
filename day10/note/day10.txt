@@ -1,0 +1,387 @@
+1、服务器处理请求的流程
+	(1)服务器每次接收到请求时，都会为这个请求开辟一个新的线程，
+	(2)服务器会把客户端时的请求数据封装到request对象中，request就是请求数据的载体
+	(3)服务器还会创建response对象，这个对象与客户端连接在一起，它可以用来向客户端发送响应。
+
+
+
+2、response：其类型为HttpServletResponse，发送状态码
+	(1)ServletResponse-->与协议无关的类型，HttpServletResponse-->与协议相关的类型
+
+	(2)状态码: 200,302,304,404,500
+		- sendError(int sc)
+			发送错误状态码，如404,500
+
+		- sendError(int sc, String msg)
+			发送错误状态码，还可以带一个错误信息
+
+		- setStatus(int sc)
+			发送成功的状态码，可以用来发送302
+
+	(3)代码:
+	public class AServlet extends HttpServlet {
+	    @Override
+	    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	        resp.sendError(404,"你访问的资源不存在,就不给你看");
+	    }
+	}
+
+
+3、HttpServletResponse发送响应头
+	(1)Content-Type、Refreshe、Location等等
+		头就是一个键值对，可能会存在一个头(一个名称，一个或多个值)
+
+	(2)方法:
+		- setHeader(String name, String value);	
+			适用于单值的响应头
+		- addHeader(String name, String value);
+			适用于多值的响应头
+		- setIntHeader(String name, int value);
+			适用于单值的int类型的响应头
+		- addIntHeader(String name, int value)
+			适用于多值的int类型的响应头
+		- setDateHeader(String name, long value);
+			适用于单值的毫秒类型的响应头
+		- addDateHeader(String name, long value);
+			适用于多值的毫秒类型的响应头
+
+	(3)代码:
+	resp.setHeader("aaa","AAA");
+
+	resp.addHeader("aaa","A");
+	resp.addHeader("aaa","AA");
+	resp.addHeader("aaa","AAA");
+
+	resp.setIntHeader("Content-Length",999);
+
+	resp.addIntHeader("Content-Length",999);
+
+	resp.setDateHeader("expires",1000*60*60*24);
+
+
+4、案例:
+	(1)发送302，设置Location头，完成重定向
+        response.setHeader("Location", "/CServlet");
+        response.setStatus(302);
+
+	(2)定时刷新，设置Refresh头，可以理解为定时重定向!
+        /**
+         * 下面是用来发送响应体!
+         */
+        PrintWriter writer = resp.getWriter();
+        writer.print("欢迎xxx登录!5秒钟后自动跳转到主页!");
+        /**
+         * 设置名为Refresh的响应头
+         */
+        resp.setHeader("Refresh", "5;URL=/EServlet");
+
+	(3)禁用浏览器缓存，Cache-Control、param、expires适用于所有的http协议版本
+        response.setHeader("Cache-Control", "no-cache");
+        response.setHeader("pragma","no-cache");
+        response.setDateHeader("expires",-1);
+	<meta>标签可以代替响应头
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+
+
+5、使用Response发送响应体
+	(1)响应体可以通常是html，也可以是图片
+
+	(2)response的两个流
+		- ServletOutputStream, 用来向客户发送字节数据
+			ServletOutputStream stream = response.getOutputStream();
+		- PrintWriter，用来向客户端发送字节数据，需要设置编码
+			PrintWriter writer = response.getWriter(); 
+		- 两个流不能同时使用
+
+	(3)案例:
+		- 使用PrintWriter发送字符数据
+        /**
+        * 使用ServletOutputStream流发送字节数据
+        */
+        String s = "Hello outputStream";
+        byte[] bytes = s.getBytes();
+        response.getOutputStream().write(bytes);
+
+		- 使用ServletOutputStream发送字节数据(图片)
+        /**
+         * 演示响应字节数据
+         */
+        //把一张照片读取到字节数组中
+        String path = "/home/king/picture/tool1.png";
+        FileInputStream in = new FileInputStream(path);
+        //读取输入流内容的字节到字节数组中
+        byte[] bytes = IOUtils.toByteArray(in);
+        response.getOutputStream().write(bytes);
+
+	(3)重定向，设置302，设置Location! 其中变化的只有Location，所以java提供一个快捷的方法，完成重定向
+		- sendRedirect(String localtion)方法
+
+		response.sendRedirect("/CServlet");
+
+
+6、使用HttpServletRequest
+	(1)request封装了客户端所有的请求数据!
+
+	(2)数据格式:
+		请求行
+		请求头
+		空行
+		请求体(GET没体)
+
+
+7、HttpServletRequest获取常用信息
+	(1)获取客户端IP，案例：封IP，方法request.getRemoveAddr()
+
+	(2)请求方式，request.getMethod()，可能是POST也可能是GET
+
+	(3)获取请求头的方法:
+		String getHeader(String name)，适用于单值头
+		int getIntHeader(String name)，适用于单值int类型的请求头
+		long getDateHeader(String anme)，适用于单值毫秒类型的请求头
+		Enumeration<String> getHeaders(String name)，适用于多值请求头
+
+	(4)代码:
+        // 获取IP地址
+        String addr = request.getRemoteAddr();
+        System.out.println(addr);
+
+        // 获取请求方式
+        System.out.println("请求方式: " + request.getMethod());
+
+        //获取User-Agent
+        String userAgent = request.getHeader("User-Agent");
+        System.out.println("User-Agent: " + userAgent);
+        if (userAgent.toLowerCase().contains("chrome")) {
+            System.out.println("你好: " + addr + ", 你用的是谷歌");
+        } else if (userAgent.toLowerCase().contains("firefox")) {
+            System.out.println("你好: " + addr + ", 你用的是火狐");
+        } else if (userAgent.toLowerCase().contains("msie")) {
+            System.out.println("你好: " + addr + ", 你用的是ie");
+        }
+
+
+8、HttpServletRequest获取请求URL
+	http://localhost:8080/day10_2/AServlet/?username-xxx&password=yyy
+	(1)获取请求URL的方法:
+		String getSchema(); 获取协议，http
+
+		String getServerName(); 获取服务器名，服务器主机名称
+
+		String getServPort(); 获取服务器端口，8080
+
+		String getContextPath(); 获取项目名,/day10_2
+
+		String getServletPath(); 获取Servlet路径，/AServlet
+
+		String getQueryString(); 获取参数部分，即问号后面的部分，username-xxx&password=yyy
+
+		String getRequestURI(); 获取请求URI，相当于项目名+Servlet路径，/day10_2/AServlet
+
+		String getRequestURL(); 获取请求URL，等于不包含参数的整个请求路径,http://localhost:8080/day10_2/AServlet
+
+
+9、案例
+	(1)防盗链： 如果请求都不是通过本站的链接发出的，发送错误状态码404，Referer这个请求头表示请求的来源
+
+        /**
+         * 使用Referer请求头,来防盗链
+         */
+        String referer = req.getHeader("Referer");
+        System.out.println(referer);
+        if (referer == null || referer.contains("localhost")) {
+            System.out.println("you are my client!");
+        }
+        else {
+            resp.sendError(404,"就是不让你看!");
+        }
+
+10、HttpServletRequest获取请求参数
+	(1)请求参数是由客户端发送给服务器的，有的可能在请求体中(POST)，有的可能在URL后(GET)
+
+	(2)请求参数，有一个参数一个值的，还有一个参数多个值。
+
+	(3)获取请求参数的常用方法
+		String getParameter(String name);
+			获取指定的名称的请求数值，适用于单值请求参数。
+
+		String[] getParameterValue(String name);
+			获取指定名称的请求参数值，适用于多值请求参数。
+
+		Enumeration<String> getParameterName();
+			获取所有请求参数名称
+
+		Map<String,String[]> getParameterMap();
+			获取所有请求参数，其中key为参数名，value为参数值。
+
+	(4)案例：超链接参数
+	(5)案例：表单数据
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("Get: " + req.getParameter("xxx"));
+        System.out.println("Get: " + req.getParameter("yyy"));
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
+        String[] hobby = req.getParameterValues("hobby");
+
+        System.out.println("username: " + username);
+        System.out.println("password: " + password);
+        System.out.println("hobby: " + Arrays.toString(hobby));
+    }
+
+    (6)代码:
+        /**
+         * 测试所有请求参数的名称
+         */
+        Enumeration names = req.getParameterNames();
+        while(names.hasMoreElements()) {
+            System.out.println(names.nextElement());
+        }
+
+        /**
+         * 获取所有请求参数，封装到Map中
+         */
+        Map<String, String[]> map = req.getParameterMap();
+        for (String name : map.keySet()) {
+            String[] values = map.get(name);
+            System.out.println(name + "=" + Arrays.toString(values));
+        }
+
+
+11、HttpServletRequest获取请求转发和请求包含
+	(1)RequestDispatcher rd = request.getRequestDispatcher("/MyServlet")
+		- ****请求转发：rd.forward(request, response);
+		- 请求包含：rd.include(request, response);
+		- 参数为被转发的或被包含的的Servlet路径
+
+	(2)有时候一个请求需要多个Servlet协作才能完成，所以需要在一个Servlet跳转到另一个Servlet！
+
+	(3)一个请求跨多个Servlet，需要使用转发和包含
+
+	(4)请求转发：由下一个Servlet完成响应体！当前Servlet可以设置响应头！(留头不留体)
+
+	(5)请求包含：由两个Servlet共同完成响应体！(都留)
+
+	(6)无论是请求转发还是请求包含，都在一个请求范围内！使用同一个request和response!
+
+	(8)请求包含中被请求Servlet不完成请求头。请求转发中被请求Servlet可以留请求头。
+
+
+12、request的域属性
+	Servlet中三大域对象：request、session、application，都有如下三个方法：
+
+	(1)void setAttribute(String name, Object value);
+
+	(2)Object getAttribute(String name);
+
+	(3)void removeAttribute(String name);
+
+	(4)同一请求内使用request.setAttribute()来传值！前一个Servlet调用setAttribute()保存值，后一个Servlet调用getAttribute()得到值。
+
+	(5)与请求参数相似，但是请求参数是客户端传递给服务器的数据。而request域属性是两个Servlet之前传递数据。
+
+
+13、请求转发和重定向的区别
+	(1)请求转发是一个请求一次响应，而重定向是两次请求两次响应
+
+	(2)请求转发地址栏不变化，而重定向会显示后一个请求的地址
+
+	(3)请求转发只能转发到本项目其他Servlet，而重定向不仅能重定向到本项目的其他Servlet，还能重定向到其他项目
+
+	(4)请求转发是服务端的行为，只需给出转发的Servlet路径，而重定向需要给出requestURI，即包含项目名！
+
+	(5)请求转发比重定向的效率高，因为是一个请求。
+		- 需要地址栏发生变化，那么必须使用重定向
+		- 需要在下一个Servlet中获取request域中数据，必须使用转发
+
+
+14、设置响应编码(服务器发送给浏览器的编码)
+	(1)常见字符编码: iso-8859-1(不支持中文)、gbk(中国的国标码)、utf-8(万国码，支持全世界的编码)
+
+	(2)response.setHeader("Content-Type", "text/html;charset=utf-8");
+	这一句不仅设置响应头，而且它会设置setCharacterEncoding()。
+
+	(3)更便捷的方法:
+		response.setContentType("text/html;charset=utf-8")
+
+
+15、设置请求编码(浏览器发送给服务器的编码)
+	(1)客户端请求编码是根据上一次请求之后服务器响应的编码决定的。
+
+	(2)POST请求，只需要在获取参数之前调用request.setCharacterEncoding("utf-8");然后在使用request.getParameter()来获取参数。
+
+	(3)GET请求想要设置要到/conf/server.xml中进行配置
+    <Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" URIEncoding="UTF-8"/>
+
+        - 当设置之后，GET请求参数的编码就不用再去自己设置，默认为UTF-8，但不能改客户的Tomcat，所以一般不能用。
+
+
+    (4)GET请求编码:
+    //获取请求参数，还是乱码，默认用ISO编码
+    String name = request.getParameter("name");
+    //反编回来,将ISO编码后的name用ISO解码，得到最初的字节数组
+    byte[] bytes = name.getBytes("ISO-8859-1");
+    name = new String(bytes, "utf-8")
+
+    (5)Tomcat8默认编码为UTF-8
+
+
+16、URL编码
+	(1)表单默认类型：Content-Type:application/x-www-form-urlencoded
+		- 就是把中文转换成%后面跟随两位的16进制数。
+
+	(2)为什么要用它：在客户端和服务器之间传递中文时需要把它转换成网络适合的方式。
+
+	(3)它不是字符编码
+
+	(4)它是用来在客户端与服务器之间传递参数的一种方式
+
+	(5)URL编码需要先制定一种字符编码，把字符串解码后，得到byte[]，然后小于0的字节+26，再转换16进制，前面添加一个%。
+
+	(6)POST请求默认就使用URL编码！tomcat会自动使用UR解码！
+
+	(7)URL编码:
+		String username = URLEncoding.encode(username, "utf-8");
+
+	(8)URL解码：
+		String username = URLEncoding.decode(username, "utf-8");
+
+	(9)最后我们需要把链接中的中文参数，使用url来编码！html中不能给出java代码，后面用jsp解决。
+
+
+17、路径
+	(1)web.xml中<url-partten>路径,叫做(Servlet路径)
+		- 要么以"*"开头，要么为"/"开头
+
+	(2)转发和包含路径
+		- 以"/"开头，相对当前项目路径，例如 http://localhost:8080/mypro/
+			request.getRequestdispacher("/BServlet").forward();		
+		- 不以"/"开头，相对当前Servlet路径
+			request.getRequestdispacher("/BServlet").forward();假如当前Servlet是，http://localhost:8080/项目名/servlet/AServlet就是	http://localhost:8080/项目名/servlet/BServlet	
+
+	(3)重定向路径(客户端路径)
+		- 以"/"开头，相对当前主机，例如 http://localhost:8080/，所以需要自己手动添加项目名，例如response.sendRedirect("/day10_1/BServlet");
+
+	(4)页面中超链接和表单路径
+		- 与重定向相同，都是客户端路径！需要添加项目名
+		- <form action="/day10_1/AServlet">
+		- <a href="/day10_1/AServlet">
+		- <a href="AServlet">，如果不以"/"开头，那么相对当前页面所在路径
+		- 建议使用"/"开头的路径，即绝对路径
+
+	(5)ServletContext获取资源路径
+		- 相对当前项目目录，即当前index.jsp所在目录
+
+	(6)ClassLoader获取资源路径
+		- 相对classes目录
+
+	(7)Class获取资源路径
+		- 以"/"开头相对classes目录
+		- 不以"/"开头相对当前.class文件所在目录

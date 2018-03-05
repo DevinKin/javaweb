@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<person>
+	<name>张三</name>	
+	<![CDATA[ <b>if(a<b && b<c && d<e) () </b>]]>
+</person>

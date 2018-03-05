@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>HTML实例</title>
+	<style type="text/css">
+		#divid {
+			width: 200px;
+			height: 150px;
+			border: 2px solid red;
+		}
+	</style>
+</head>
+<body>
+	<span id="sid">蛤蛤蛤呵呵呵</span>
+	<div id="divid">
+		
+	</div>
+	<input type="button" value="getspan" onclick="getspan();">
+</body>
+	<script type="text/javascript">
+		function getspan () {
+		var span1 = document.getElementById("sid");		
+		//alert(span1.innerHTML);
+		var div1 = document.getElementById("divid");
+		//div1.innerHTML = "<h1>AAAAAA</h1>";
+		var tab="<table border='1'><tr><td>AAAaa</td></tr><tr><td>AAAaa</td></tr><tr><td>AAAaa</td></tr></table>";
+		div1.innerHTML = tab;
+		}
+	</script>
+</html>

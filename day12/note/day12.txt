@@ -1,0 +1,392 @@
+1、jsp指令概述
+	(1)jsp指令格式:
+		<%@指令名 attr1="" attr2="">，一般都会把jsp指令放到jsp文件的嘴上翻
+
+	(2)jsp中有三大指令：page、include、taglib，最为常用，也最复杂的是page指令
+
+	(3)一个jsp页面中可以有0-N个指令的定义！
+
+2、jsp三大指令
+	(1)page	-->最复杂
+		<%@page language="java" info="xxx"%>
+	(2)include -->静态包含
+	(3)taglib --> 导入标签库
+
+
+3、page指令
+	(1)page指令是最为常用的指令，也是属性最多的指令
+
+	(2)属性：
+		pageEncoding：
+			- 它指定当前jsp页面的编码，只要不说谎，就不会有乱码
+
+			- 在服务器要把jsp编译成.java时需要使用pageEncoding
+
+			- 例:pageEncoding="utf-8
+
+		contentType:
+		 	- 它表示添加一个响应头，Content-Type！等同于response.setContentType("text/html;charset=utf-8");
+
+		 	- 如果两个属性只提供一个，那么另一个的默认值为设置那一个。
+
+		 	- 如果两个属性都没有设置，那么默认为iso
+
+		 	- 例:contentType="text/html;charset=UTF-8" 
+
+		import：导入包！可以多次出现
+			- 例：import="java.awt.*,javafx.application.*"
+
+		errorPage：
+			- 当前页面如果抛出异常，那么要转发到哪一个页面，由errorPage来指定。
+
+			- 例：errorPage="errorPage.jsp" 
+
+		isErrorPage:
+			- 它指定当前页面是否为处理错误的页面。该属性为true时，这个页面会设置状态码为500错误。并且可以使用九大内置对象中的exception!
+
+			- 例: isErrorPage="true"
+
+		autoFlush:
+			- 指定jsp的输出流缓冲区满时，是否自动刷新！默认为true，那么在缓冲区满时抛出异常！
+
+		buffer: 
+			- 指定缓冲区大小，默认为8kb，通常不需要修改！
+
+		isELIgnored: 是否忽略el表达式，默认为false，不忽略，即支持！
+
+		language:
+			- 指定当前jsp编译后的语言类型，默认值为java。
+
+		info: 
+			- 信息
+
+		isThreadSafe:
+			- 当前jsp是否支持并发访问！
+
+		session: 
+			- 当前页面是否支持session，如果为false，那么当前页面没有session这个内置对象！
+
+		extends: 让jsp生成的servlet去继承该属性指定的类！
+
+4、web.xml中配置配置错误页面
+	例:
+		<error-page>
+			<error-code>404</error-code>
+			<location>/error404.jsp</location>
+		</error-page>
+
+		<error-page>
+			<error-code>500</error-code>
+			<location>/error500.jsp</location>
+		</error-page>
+
+		<error-page>
+			<exception-type>java.lang.RuntimeException</exception-type>
+			<location>/error.jsp</location>
+		</error-page>
+
+
+5、JSP的九大内置对象
+	(1)out：jsp的输出流，用来向客户端相应
+
+	(2)page：当前jsp对象，它的引用类型是Object，即真身中有如下代码。Object page = this;
+
+	(3)config：它对应真身中的ServletConfig对象
+
+	(4)pageContext：一个顶九个
+
+	(5)request：HttpServletRequest
+
+	(6)response：HttpServletResponse
+
+	(7)exception：Throwable
+
+	(8)session：HttpSession
+
+	(9)application：ServletContext
+
+
+6、pageContext对象
+	(1)一个顶9个
+
+	(2)Servlet有三大域，而JSP有四大域，它就是最后一个域对象。
+
+	(3)域对象的作用范围：
+		ServletContext：整个应用程序
+
+		session: 整个会话(一个会话只有一个用户)
+
+		request：一个请求链
+
+		pageContext：一个jsp页面！这个域是在当前jsp页面和当前jsp页面中使用的标签之间共享数据！	
+			- 域对象
+			- 代理其他域！pageContext.setAttribute("xxx","XXX",PageContext.SESSION_SCOPE); 存在session域中。
+
+			- 获取其他8个内置对象
+
+			- 全域查找：pageContext.findAttribute("xxx");从小到大依次查找，pageContext->request->session->ServletContext。四大域全找。
+
+
+7、include指令
+	(1)与RequestDispatchar的include()方法功能相似！
+
+	(2)<%@include%>它是在编译成java文件时完成的！他们功能生成一个java文件(一个Servlet)，再生成一个class。
+
+	(3)RequestDispatchar的include()是一个方法，包含和被包含是两个Servlet，即两个.class，他们只是把相应的内容在运行时合并了！
+
+	(4)实例:
+	//正确
+	<%@include file=lo.jsp"%>
+	//错误，<%=pagePath%>在运行时才被解析出来，即运行时包含，而不是静态包含。
+	<%@include file=<%=pagePath%>"%>
+
+	(5)静态包含的作用：
+		- 把页面分解了，使用包含的方式组合在一起，这样一个页面中不变的东西，就是一个独立的jsp，我们只需要处理变化的页面。
+
+
+8、taglib指令
+	(1)两个属性
+		prefix：指定标签库在本页面中的前缀！由我们自己来起名称！
+
+		uri：指定标签库的位置！
+
+	(2)代码：
+		<%@taglib prefix="pre" uri="/struts-tags"%>
+		前缀的用法<pre:text>
+
+
+9、JSP的动作标签
+	(1)这些jsp的动作标签，与html提供的标签有本质的区别。
+
+	(2)动作标签是由tomcat(服务器)来执行的！它与java代码一样，都是在服务端执行的！
+
+	(3)html由浏览器来执行！
+
+	(4)<jsp:forward>：转发！它与RequestDispatcher的forward方法是一样的，一个是在Servlet中使用，一个是在JSP中使用！
+
+	(5)<jsp:include>：包含！它与RequestDispatcher的include方法是一样的，一个是在Servlet中使用，一个是在JSP中使用！包含在运行时完成的。合并只是一个class调用另一个class
+		-<%@include>和<jsp:include>有什么不同!
+
+	(6)<jsp:param>：它用来作为forward和include子标签，用来给转发或包含的页面传递参数！
+
+
+10、conf/context.xml配置
+	<Context reloadable="true">：不用重启tomcat会自动重新加载tomcat中修改的文件
+
+
+11、conf/web.xml配置
+    <servlet>
+        <servlet-name>jsp</servlet-name>
+        <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
+        <init-param>
+            <param-name>fork</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>xpoweredBy</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>jsp</servlet-name>
+        <url-pattern>*.jsp</url-pattern>
+        <url-pattern>*.jspx</url-pattern>
+    </servlet-mapping>
+
+
+12、JavaBean规范
+	(1)JavaBean必须要为成员提供get/set方法(两者中只提供一个也是可以的！
+
+	(2)必须要有一个默认构造器(无参的！)
+
+	(3)一般对于具有get/set方法的成员变量,我们称之为属性
+
+	(4)其实就算一个属性没有对应的成员变量,只有get/set方法也是可以的
+
+	(5)属性的名称就是get/set方法去除get/set后，再把字母小写了！
+
+	(6)方法名称满足一定的规范，那么它就是属性！boolean类型的属性，它的读方法可以是is开头，也可以是get开头！	
+
+
+13、内省的过程
+	(1)内省类-->Bean信息-->属性描述符-->属性的get/set对应的Method-->可以反射了
+
+	(2)commons-beanutils,它是依赖内省完成！
+
+	(3)导包：
+		- commons-beanutils.jar
+		- commons-logging.jar
+
+	(4)方法:
+	BeanUtils.getProperty(Object bean, String propertyName);
+	BeanUtils.setProperty(Object bean, String propertyName, String propertyValue);
+	BeanUtils.populate(Map map, Object bean);
+
+	CommonUtils.toBean(Map map, Class class);
+
+	(5)内省：依赖反射
+
+
+14、jsp中与javaBean相关的标签
+	(1)<jsp:useBean>：创建或查询bean
+		-代码:
+		<jsp:useBean id="user1" class="cn.itcast.domain.User" scope="page"/>
+		在page域中查找名为user1的Bean，如果不能存在，创建之。
+	(2)<jsp:setProperty>：
+		-代码:
+		<jsp:setProperty property="username" name="user1" value="admin"/>
+		设置名为user1的这个javabean的username属性值为admin
+
+	(3)<jsp:getProperty>
+		-代码:
+		<jsp:getProperty property="username" name="user1"/>
+		获取user1的javabean的名为username的属性
+
+
+15、EL表达式
+	(1)EL表达式是JSP内置的表达式语言！
+
+	(2)EL表达式可以实现全域查找
+
+	(3)jsp2.0开始，不让使用java脚本，而是使用EL表达式和动态标签来替代java脚本
+
+	(4)EL替代的是<%=...%>，也就是说，EL只能做输出。
+
+
+16、EL表达式来操作四大域
+	(1)${xxx}，全域查找名为xxx的属性，如果不存在，输出空字符串，而不是null。
+
+	(2)${pageScope.xxx}、${requestScope.xxx}、${sessionScope.xxx}、${application.xxx}，指定域的属性。
+
+
+17、JavaBean导航
+
+
+
+18、EL可以输出的东西在11个内置对象中！
+	(1)EL一共11内置对象。无需创建即可使用，这11个内置对象中又10个是Map类型，最后一个是pageContext对象。 
+
+	(2)内置对象:
+		- pageScope
+		- requestScope
+		- sessionScope
+		- applicationScope
+
+		- param：对应参数，它是一个Map<String,String>，其中key为参数名，value为参数值，适用于单值的参数
+		${param.username}
+
+		- paramValues：对应参数，它是一个Map<String,String[]>，其中key为参数名，values为多个参数值，适用于多值的参数
+		${paramValues.hobby[0]}
+		${paramValues.hobby[1]}
+
+
+		- header：对应请求头，它是一个Map<String,String>，其中key表示头名称，value为单个头值，适用于单值头。
+
+		- headerValues：对应请求头，它是一个Map<String,String[]>，其中key表示头名称，value为多个头值，适用于多值头。
+
+		- initParam：获取web.xml中<context-param>内的参数！
+	    <context-param>
+	        <param-name>xxx</param-name>
+	        <param-value>XXX</param-value>
+	    </context-param>
+	    <context-param>
+	        <param-name>yyy</param-name>
+	        <param-value>YYY</param-value>
+	    </context-param>
+
+	    ${initParam.xxx}
+
+		- cookie：Map<String,Cookie>类型，其中key是cookie的name,value是cookie对象。
+		${cookie.username.value}
+
+		- pageContext：它是PageContext类型！
+			获取请求协议
+			${pageContext.request.sheme}
+			获取项目名称
+			${pageContext.request.contextPath}
+			不用cookie内置对象获取sessionId
+			${pageCONtext.session.id}
+
+
+19、EL函数库(由JSTL提供的)
+	(1)导入标签库
+	<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+	(2)EL函数库介绍
+		String toUpperCase(String input);
+		String toLowerCase(String input);
+		int indexOf(String input, String substring);
+		boolean contains(String input, String substring);
+		boolean containsIgnoreCase(String input, String substring);
+		boolean startWith(String input, String substring);
+		boolean endWith(String input, String substring);
+		String substring(String input, int beginIndex, int endIndex);
+		String substringAfter(String input, String substring);
+		String substringBefore(String input, String substring);
+		String escapeXml(String input);把字符串的"<",">","'","&"转义了
+		String replace(String input, String substringBefore, String substringAfter);
+		String[] split(String input, String delimiters);
+		int length(Object obj);可以获取字符串，数组，各种集合的长度
+		String join(String array[], String separator);
+
+	(3)代码:
+<%
+    String[] strs = {"a", "b", "c"};
+    List<String> list = new ArrayList<String>();
+    list.add("a");
+    pageContext.setAttribute("arr", strs);
+    pageContext.setAttribute("list", list);
+%>
+
+${fn:length(arr)} <br/>     <!--3-->
+${fn:length(list)}<br/>     <!--1-->
+${fn:toLowerCase("Hello")}<br/>   <!--hello-->
+${fn:toUpperCase("Hello")}<br/>   <!--HELLO-->
+${fn:contains("abc","a" )}<br/>   <!--true-->
+${fn:containsIgnoreCase("abc","Ab" )}<br/>  <!--true-->
+${fn:endsWith("Hello.java",".java" )}<br/>  <!--true-->
+${fn:startsWith("Hello.java", "Hell" )}<br/>  <!--true-->
+${fn:indexOf("Hello-World","-" )}<br/>      <!--5-->
+${fn:join(arr,";")}<br/>    <!--a;b;c-->
+${fn:replace("Hello-world","-" ,"+" )}<br/><!--Hello+World-->
+${fn:join(fn:split("a;b;c;", ";"), "-")}<br/><!-- a-b-c -->
+${fn:substring("0123456789",6 ,9 )}<br/><!--678-->
+${fn:substring("0123456789",5 ,-1 )}<br/><!--56789-->
+${fn:substringAfter("Hello-World","-" )}<br/><!--World-->
+${fn:substringBefore("Hello-World","-" )}<br/><!--Hello-->
+${fn:trim("   a b c    ")}<br/><!--a b c -->
+${fn:escapeXml("<html></html>")} <!--<html></html>-->
+
+
+20、自定义函数库
+	(1)第一步：写一个java类，类中可以定义0-N个方法，但必须是静态static的，而且又返回值
+
+	(2)在WEB-INF目录下创建一个tld文件 
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+    <description>itcast</description>
+    <display-name>itcast function</display-name>
+    <tlib-version>1.0</tlib-version>
+    <short-name>it</short-name>
+    <uri>http://www.itcast.cn/el/functions</uri>
+
+
+    <function>
+        <name>fun</name>
+        <function-class>cn.itcast.fn.MyFunction</function-class>
+        <function-signature>java.lang.String fun()</function-signature>
+    </function>
+
+</taglib>
+
+	(3)在jsp页面中导入标签库
+    <%@ taglib prefix="fn" uri="/WEB-INF/tlds/itcast.tld" %>
+
+    (4)在jsp页面中使用自定义的函数
+	<h1>${fn:fun()}</h1>

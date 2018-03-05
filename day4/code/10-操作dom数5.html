@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title></title>
+	<style type="text/css">
+		
+	</style>
+</head>
+<body>
+	<ul id="ulid">
+		<li id="li11">小黄</li>
+		<li id="li12">老王</li>
+		<li id="li13">王昭君</li>
+		<li id="li14">貂蝉</li>
+	</ul>
+
+	<div id="div1">
+		
+	</div>
+
+	<input type="button" value="clone" onclick="clone();">
+</body>
+	<script type="text/javascript">
+	function clone () {
+		var ul1 = document.getElementById("ulid");
+		var div1 = document.getElementById("div1");
+		var cul1 = ul1.cloneNode(true);
+		div1.appendChild(cul1);
+	}
+	</script>
+</html>

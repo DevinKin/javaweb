@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title></title>
+	<style type="text/css">
+		#select1 {
+			width: 300px;
+			height: 300px;
+		}
+
+		#select2 {
+			width: 300px;
+			height: 300px;
+		}
+	</style>
+</head>
+<body>
+	<select id="select1" multiple="multiple">
+		<option id="op1">选项1</option>
+		<option id="op2">选项2</option>
+		<option id="op3">选项3</option>
+		<option id="op4">选项4</option>
+		<option id="op5">选项5</option>
+		<option id="op6">选项6</option>
+		<option id="op7">选项7</option>
+		<option id="op8">选项8</option>
+	</select>
+	
+	<select id="select2" multiple="multiple">
+		<option id="op9">选项9</option>
+	</select>
+	<br/>
+	<input type="button" value="选中添加到右边>>" onclick="toRight();"/>
+	<input type="button" value="全部添加到右边>>" onclick="allToRight();"/>
+
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="button" value="<<选中添加到左边" onclick="toLeft();"/>
+	<input type="button" value="<<全部添加到左边" onclick="allToLeft();"/>
+
+</body>
+	<script type="text/javascript">
+		
+
+		function toLeft () {
+			var sel1 = document.getElementById("select1");
+			var sel2 = document.getElementById("select2");
+			var ops = sel2.getElementsByTagName("option");			
+			for (var i = 0; i < ops.length; i++)
+			{
+				var op = ops[i];
+				if (op.selected ==true)
+				{
+					sel1.appendChild(op);
+					i--;
+				}
+			}
+		}
+
+		function toRight () {
+			var sel1 = document.getElementById("select1");
+			var sel2 = document.getElementById("select2");
+			var ops = sel1.getElementsByTagName("option");			
+			for (var i = 0; i < ops.length; i++)
+			{
+				var op = ops[i];
+				if (op.selected ==true)
+				{
+					sel2.appendChild(op);
+					i--;
+				}
+			}
+		}
+		
+		function allToLeft () {
+			var sel1 = document.getElementById("select1");
+			var sel2 = document.getElementById("select2");
+			var ops = sel2.getElementsByTagName("option");
+			for (var i = 0; i < ops.length; i++)
+			{
+				sel1.appendChild(ops[i]);
+				i--;
+			}
+		}
+
+		function allToRight () {
+			var sel1 = document.getElementById("select1");
+			var sel2 = document.getElementById("select2");
+			var ops = sel1.getElementsByTagName("option");
+			for (var i = 0; i < ops.length; i++)
+			{
+				sel2.appendChild(ops[i]);
+				i--;
+			}
+		}
+	</script>
+</html>
