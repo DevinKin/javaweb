@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<users> 
+  <user username="king" password="123" age="12" gender="男"/>  
+  <user username="gui" password="123" age="12" gender="男"/>  
+  <user username="kali" password="123" age="12" gender="男"/>
+</users>

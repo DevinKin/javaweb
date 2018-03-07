@@ -196,3 +196,41 @@
 	(3)提高效率
 
 3、PreparedStatement的用法
+	(1)如何得到ParedStatement对象：
+		- 给出SQL模版
+
+		- 调用Connection的PreparedStatement prepareStatement(String sql);
+
+		- 调用pstmt的setXXX()系列方法为sql模版中的?赋值！
+
+		- 调用pstmt的excuteUpdate()或executeQuery()，但他的方法都没有参数
+
+4、PreparedStatement的原理
+	(1)服务器的工总：
+		- 校验sql语句的语法！
+
+		- 编译：一个与函数相似的东西
+
+		- 执行：调用函数
+
+	(2)PreparedStatement：
+		- 前提：链接的数据库必须支持预处理！几乎没有不支持的
+
+		- 每个pstmt都与一个sql模版绑定在一起，先把sql模版给数据库，数据库进行校验，再进行编译。执行时只是把参数传递过去而已。
+
+		- 若二次执行时，就不用再次校验语法了，也不用再次编译！直接执行！
+
+
+5、mysql默认关闭预处理
+	(1)打开预处理
+jdbc:mysql://localhost:3306/mydb3?userServerPrepStmts=true&cachePrepStmts=true
+
+
+6、面向接口编程
+修改项目
+	(1)把UserDao修改为接口，然后把原来的UserDao修改类名为UserDaoImpl
+
+	(2)修改UserService中对UserDao的实例化：
+		private UserDao userDao = DaoFactory.getUserDao();
+
+	(3)创建DaoFactory，提供getUserDao()

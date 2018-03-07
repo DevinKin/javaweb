@@ -22,7 +22,7 @@ public class Demo2 {
        // jdbc协议的格式!
        String url = "jdbc:mysql://localhost:3306/mydb3";
        String username = "root";
-       String password = "123";
+       String password = "root123";
 
        Class.forName(driverClassName);
        Connection connection = DriverManager.getConnection(url, username, password);
@@ -55,7 +55,7 @@ public class Demo2 {
         String driverClassName = "com.mysql.jdbc.Driver";
         String url = "jdbc:mysql://localhost:3306/exam";
         String username = "root";
-        String password = "123";
+        String password = "root123";
 
         Class.forName(driverClassName);
 
@@ -101,7 +101,7 @@ public class Demo2 {
             String DriverClassName = "com.mysql.jdbc.Driver";
             String url = "jdbc:mysql://localhost:3306/exam";
             String username = "root";
-            String password = "123";
+            String password = "root123";
             Class.forName(DriverClassName);
 
             connection = DriverManager.getConnection(url,username,password) ;
