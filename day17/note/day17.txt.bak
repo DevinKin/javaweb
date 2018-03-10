@@ -1,6 +1,6 @@
 一、JDBC入门
 
-1、JDBC -> Java DataBase Connectivity
+1、JDBC -> Java DataBase Connaectivity
 
 2、步骤：
 	(1)导入jar包：驱动！
@@ -206,7 +206,7 @@
 		- 调用pstmt的excuteUpdate()或executeQuery()，但他的方法都没有参数
 
 4、PreparedStatement的原理
-	(1)服务器的工作：
+	(1)服务器的工总：
 		- 校验sql语句的语法！
 
 		- 编译：一个与函数相似的东西
@@ -256,74 +256,10 @@ jdbc:mysql://localhost:3306/mydb3?userServerPrepStmts=true&cachePrepStmts=true
 	(1)java.util.Date -> java.sql.Date、Time、Timestamp
 		- 把 util的Date，Time，Timestamp转换成毫秒值
 
-		- 使用毫秒值创建sql的Date，Time，Timestamp
+		- 使用毫秒只创建sql的Date，Time，Timestamp
 	(2)java.sql.Date、Time、Timestamp -> java.util.Date
 		-这一步不需要处理，java.sql.Date、Time、Timestamp的父类是java.util.Date
 
 	(3) java.util.Date date = new java.Util.Date();
 	long l = date.getTime();
 	java.sql.Date sqlDate = new java.sql.Date(l);
-	
-
-
-9、大数据
-	(1)目标：把mp3保存到数据库中！
-		在my.ini中添加配置：
-			max_allowed_package=10M
-
-	(2)标准SQL用来保存大数据类型：
-		类型			长度
-		字节类型
-		tinyblob		2^8-1B(256B)
-		blob			2^16-1B(64K)
-		mediumblob		2^24-1B(16M)
-		longblob		2^32-1B(4G)
-		字符类型
-		tinyclob		2^8-1B(256B)
-		clob			2^16-1B(64K)
-		mediumclob		2^24-1B(16M)
-		longclob		2^32-1B(4G)
-
-	(3)mysql只提供四种类型处理文本大数据
-		tinytext		2^8-1B(256B)
-		text			2^16-1B(64K)
-		mediumtext		2^24-1B(16M)
-		longtext		2^32-1B(4G)
-
-
-10、批处理
-	(1)MySQL默认关闭批处理，打开批处理需要在url后添加
-		rewriteBatchedStatements=true
-	(2)Prepared批处理
-    public void func5() throws SQLException {
-        /**
-         * pstmt对象内部有集合
-         * 1. 用循环疯狂的向pstmt中添加sql参数，它自己有模版，使用一组参数与模版就可以匹配出一条sql语句
-         * 2. 调用它的执行批方法，完成向数据库发送的操作
-         * 3. 执行批
-         */
-
-        Connection con = JdbcUtils.getConnection();
-
-        /**
-         * 2. 给出select语句模版，创建pstmt
-         */
-        String sql = "INSERT INTO t_stu VALUES(?,?,?,?)";
-        PreparedStatement pstmt = con.prepareStatement(sql);
-
-        // 疯狂的添加参数
-        for (int i = 0; i < 10000; i++) {
-            pstmt.setInt(1, i+1);
-            pstmt.setString(2,"stu_" + i);
-            pstmt.setInt(3,i);
-            pstmt.setString(4,i%2==0?"男":"女");
-
-            //添加批！这一组参数就保存到集合中了。
-            pstmt.addBatch();
-        }
-        long start = System.currentTimeMillis();
-        //执行批!
-        pstmt.executeBatch();
-        long end = System.currentTimeMillis();
-        System.out.println(end - start);
-    }
