@@ -1,0 +1,302 @@
+* 1、事务的四大特性(ACID)
+** 原子性(Atomicity)：
+事务中所有操作都是不可再分割的原子单位。事务中所有操作要么全部执行成功，要么全部执行失败。
+
+** 一致性(Consistency)：
+事务执行后，数据库状态与其他业务规则保持一直。如转账业务，无论事物执行成功与否，参与转账的两个帐号余额之和应该是不变的
+
+** 隔离性(Isolation)：
+隔离性是指并发操作中，不同事物之间应该隔离开来，使每个并发中的事物不会互相干扰。
+
+** 持久性(Durability)：
+一旦事务提交成功，事务中所有的数据操作都必须被持久化到数据库中，即使提交事物后，数据库马上崩溃，在数据库重启时，也必须能保证通过某种机制恢复数据。
+
+
+* MySQL中的事务：
+** 在默认情况下，MySQL每执行一条SQL语句，都是一个单独的事务。如果需要在事务中包含多条SQL语句，那么需要开启事务和结束事务。
+*** 开启事务：start transaction
+*** 结束事务：commit 或 rollback
+
+** 例:
+1. start transaction
+2. UPDATE account SET balance=900 WHERE name='zs';
+3. UPDATE account SET balance=1100 WHERE name='ls';
+4. rollback; 或者 commit
+
+
+* JDBC中操作事务
+1. 在jdbc中处理事务，都是通过Connection完成的
+
+2. 同一事务中的所有操作，都在使用同一个Connection对象！
+
+** JDBC中的事务
+1. Connection的三个方法与事务相关：
+   (1)setAutoCommit(boolean)：设置是否为自动提交事务，如果true(默认为true)表示自动提交，也就是每条执行的SQL语句都是一个单独的事务，如果设置false，那么就相当于开启了事务。
+       con.setAutoCommit(false)表示开启事务
+   (2)commit()：提交结束事务
+       con.commit()：表示提交事务
+
+   (3)rollback()：回滚结束事务
+       con.rollback()：表示回滚事务
+
+
+2. jdbc处理事务的代码格式：
+try {
+  con.setAutoCommit(false); //开启事务
+  ...
+  ...
+  con.commit();  //try 的最后提交事务
+} catch() {
+  con.rollback();
+}
+
+
+** 事务隔离级别
+*** 事务的并发读问题
+    1. 脏读(dirty read)：读取到另一事务未提交数据
+    2. 不可重复读(unrepeatable read)：两次读取不一致，因为另一事务对该记录做了修改。
+    3. 幻读(虚读phantom read)：读到另一事务已提交数据
+
+
+** 四大隔离级别
+*** SERIALIZABLE(串行化)
+    1. 不会出现任何并发问题，因为它对同一数据的访问是串行的，非并发访问。
+    2. 性能最差
+*** REPEATABLE READ(可重复读)(MySQL)
+    1. 防止脏读和不可重复读
+    2. 性能比SERIALIZABLE好
+
+*** READ COMMITTED(读已提交数据)(Oracle)
+    1. 防止脏读，没有处理不可重复读，也没有处理幻读
+    2. 性能比REPEATABLE READ好
+
+*** READ UNCOMMITTED(读未提交数据)
+    1. 可能出现任何事务并发问题
+    2. 性能最好
+
+    
+** MySQL隔离级别
+   1. 查看隔离级别
+       SELECT @@tx_isolation
+   2. 设置当前连接的隔离级别
+       settransaction isolationlevel [4 选 1]
+
+** JDBC设置隔离级别
+   1. con.setTransactionisolation[int level]
+      参数可选值如下
+      Connection.TRANSATION_READ_UNCOMMITTED
+      Connection.TRANSATION_READ_COMMITED
+      Connection.TRANSATION_REPEATABLE_READ
+      Connection.TRANSATION_SERIALIZABLE
+
+
+* 数据库连接池
+** 池参数(所有池参数都有默认值)
+   1. 初始大小：10个
+   2. 最小空闲连接：3个
+   3. 增量：一次创建的最小单位(5个)
+   4. 最大空闲连接数：12个
+   5. 最大连接数：20个
+   6. 最大等待时间：1000ms
+
+** 四大连接参数
+   1.连接池也是使用四大连接参数完成创建连接对象！
+   
+** 连接池实现的接口
+   1. 连接池必须实现：javax.sql.DataSource接口！
+   2. 连接池返回的Connection对象，它的close()方法与众不同！调用它的close()不是关闭，而是把连接归还给池！
+
+
+* 装饰者模式
+
+** 对象增强的手段
+   1. 继承
+      被增强的对象是固定的
+      增强的内容也是固定的
+
+   2. 装饰者模式
+      被增强的对象是可以切换的
+      增强的内容是固定的
+
+   3. 动态代理(AOP)
+      被增强的对象可以切换：Service
+      增强的内容也可以切换：事务处理
+
+** 继承的优缺点
+   1. 增强的内容是死的，不能动
+   2. 被增强的对象也是死的
+
+** 装饰者模式
+   1. 增强的内容是不能修改的！
+   2. 被增强的对象也是任意的
+   3. 用途：不知道被增强对象的具体类型时，可以使用！
+      
+
+* C3P0数据库连接池
+  
+1. C3P0中池类是：ComboPooledDataSource
+
+2. 例子
+#+BEGIN_SRC java
+    @Test
+    public void func1() throws PropertyVetoException, SQLException {
+        //创建连接池对象
+        ComboPooledDataSource dataSource = new ComboPooledDataSource();
+
+        //对池四大参数配置
+        dataSource.setDriverClass("com.mysql.jdbc.Driver");
+        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/mydb3");
+        dataSource.setUser("root");
+        dataSource.setPassword("root123");
+
+        //池配置
+        dataSource.setAcquireIncrement(5);
+        dataSource.setInitialPoolSize(20);
+        dataSource.setMinPoolSize(2);
+        dataSource.setMaxPoolSize(50);
+
+        Connection con = dataSource.getConnection();
+        System.out.println(con);
+        con.close();
+    }
+#+END_SRC
+
+** 配置文件的要求
+   1. 文件名称：必须叫c3p0-config.xml
+   2. 文件位置：必须在src下
+
+
+* Tomcat配置JNDI资源
+
+** JNDI(Java Naming and Directory interface)简介
+   1. java命名和目录接口。JNDI的作用就是：在服务器上配置资源，然后通过同一的方式来获取配置的资源。
+   2. 这里配置的资源当然是连接池了，这样项目就可以通过统一的方式来获取连接池对象。
+
+
+** Tomcat配置jndi资源的格式
+#+BEGIN_SRC xml
+<Comtext ...>
+  ...
+  <Resource name="bean/MyBeanFactory" auth="Container"
+            type="com.mycompany.MyBean"
+            factory="org.apache.naming.factory.BeanFactory"
+            bar="23"/>
+  ...
+</Comtext>
+#+END_SRC
+   1. 配置JNDI资源需要到<Context>元素中配置<Resource>子元素：
+      - name：指定资源名称，随意给，在获取资源时需要这个名称
+      - factory：用来创建资源的工厂，这个值基本是固定的，不用修改
+      - type：资源类型，我们要给出的类型当然是我们连接池的类型了
+      - bar：表示资源的属性，如果资源存在名为bar的属性，那么就配置bar的值。对于DBCP链接池而言usernameu，你需要配置的不是bar，因为它没有bar这个属性，而是应该去配置url、username等属性
+
+
+** 获取资源
+   1. 格式：
+#+BEGIN_SRC xml
+<Context>
+	<!--
+	name：指定资源的名称
+	factory：资源由谁来负责创建
+	type：资源的类型
+	其他的东西都是资源的参数
+	-->
+	<Resource name="jdbc/dataSource"
+			factory="org.apache.naming.factory.BeanFactory"
+			type="com.mchange.v2.c3p0.ComboPooledDataSource"
+			jdbcUrl="jdbc:mysql://localhost:3306/mydb3"
+			driverClass="com.mysql.jdbc.Driver"
+			user="root"
+			password="root123"
+			acquireIncrement="5"
+			initialPoolSize="10"
+			/>
+</Context>
+#+END_SRC
+   
+   2. 获取方式：
+#+BEGIN_SRC java
+public class AServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        /**
+         * 1. 创建JNDI的上下文对象
+         */
+        try {
+            Context cxt = new InitialContext();
+            //2. 查询入口
+            //Context envContext = (Context)cxt.lookup("java:comp/env");
+            //3. 再进行二次查找，找到我们的资源
+            //使用的名称与<Resource>元素的名称对应
+            //DataSource dataSource = (DataSource) envContext.lookup("jdbc/dataSource");
+            DataSource dataSource = (DataSource) cxt.lookup("java:/com/env/jdbc/dataSource");
+
+            Connection con = dataSource.getConnection();
+            System.out.println(con);
+            con.close();
+        } catch (NamingException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+#+END_SRC
+
+
+* ThreadLocal
+** Threadlocal类只有三个方法
+   1. void set(T value); -> 保存值
+   2. T get(); -> 获得值
+   3. void remove(); 移除值
+
+** Threadlocal是一个Map<Thread,T>
+   1. 简单实现
+#+BEGIN_SRC java
+/**
+ * 它是一个内部是一个Map
+ */
+class TL<T> {
+    private Map<Thread, T> map = new HashMap<Thread,T>();
+
+    public void set(T data) {
+        map.put(Thread.currentThread(), data);
+    }
+
+    public T get() {
+        return map.get(Thread.currentThread());
+    }
+
+    public void remove() {
+        map.remove(Thread.currentThread());
+    }
+}
+#+END_SRC
+
+* Common-dbutils.jar
+1. QueryRunner类 
+- update方法：
+int update(String sql, Object[] params) --> 可执行增、删、改语句
+int update(Connection con, String sql, Object... params) --> 需要调用者提供Connection，本方法不再管理Connection了。支持事务
+
+- T query(String sql, ResultSetHandler rsh, Object... params) --> 可执行查询
+  - 它会先得到ResultSet，然后调用rsh的handle()把rs转换成需要的类型！
+
+- T query(Connection con, String sql, Resultsethandler rsh, Object... params); 支持事务
+
+- ResultSetHandler接口：
+  - BeanHandler(单行) --> 构造器需要一个Class类型的参数，用来把结果转换成指定类型的JavaBean对象
+
+  - BeanListHandler(多行) --> 构造器也是需要一个Class类型的参数，用来把结果集转换成List对象，一堆JavaBean
+
+  - MapHandler(单行) --> 把一行结果集转换为Map对象
+    - 一行记录：
+      sid sname age gender
+      1000 zs   99  male
+    - 一个Map：
+      (sid:1001, sname:zs, age:99, gender:male)
+
+  - MapListHandler(多行) --> 把一行记录转换成一个Map，多行就是多个Map，即List<Map>
+
+  - ScalarHandler(单行单列) --> 通常用于SELECT COUNT(*) FROM t_stu; 语句！结果集是单行单列！它返回一个Object
+
+
