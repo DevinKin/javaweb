@@ -1,0 +1,143 @@
+* BaseServlet
+1. 我们希望在一个Servlet中可以有多个请求处理方法！
+2. 客户端发送请求时，必须多给出一个参数，用来说明要调用的方法
+   请求处理方法的签名必须与service相同，即返回值和参数，以及声明的异常都相同
+3. 客户端必须传递名为method的参数
+
+
+
+** 例如
+1.
+   UserServlet {
+   public void addUser();
+   public void updateUser();
+   public void deleteUser();
+}
+
+2. domain:User
+   dao: UserDao
+   service: UserService
+   servlet: UserServlet
+
+3. 声明周期方法
+   a. void init(ServletConfig config);
+   b. void destory();
+   c. void service(ServletRequest, ServletResponse) throws IOException, ServletException {
+      在这里让它去调用其他方法！
+      要求：用户发出请求时，必须给出一个参数，来说明调用哪一个方法
+      //获取参数，通过参数名称来确定要调用的方法
+   };
+
+
+** 代码
+#+BEGIN_SRC java
+    public void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        /**
+         * 1. 获取参数，用来识别用户想要请求的方法
+         * 2. 然后判断是哪一个方法，是哪一个就调用哪一个
+         */
+        String methodName = req.getParameter("method");
+        /**
+         * 得到方法名称，是否可通过反射来调用方法？
+         * 1. 得到方法名，通过方法名再得到Method类的对象
+         *  - 需要得到Class，然后调用它的方法进行查询！得到Method
+         *  - 我们要查询的是当前类的方法，所以我们需要得到当前类的Class
+         */
+        if (methodName == null || methodName.isEmpty()) {
+            throw new RuntimeException("你没有传递method参数！无法确定你想要调用的方法！");
+        }
+        Class clzz = this.getClass();
+        Method method = null;
+        try {
+            method = clzz.getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            throw new RuntimeException("你要调用的方法：" + methodName + "(HttpServletRequest req,HttpServletResponse resp)，它不存在");
+        }
+        /**
+         * 调用method表示的方法
+         */
+        try {
+            //this.addUser(req,resp); -> method.invoke(this,req,resp);
+            String result = (String) method.invoke(this, req, resp);
+            /**
+             * 获取请求处理方法执行后返回的字符串，它表示转发或重定向的路径
+             * 帮它完成重定向
+             * 如果用户返回的字符串是null，或为""，那么我们什么都做！
+             *
+             * 查看返回的字符串是否包含冒号，如果没有，表示转发
+             * 如果有，使用冒号分割字符串，得到前缀和后缀
+             * 其中前缀如果是f，表示转发，如果是r表示重定向，后缀就是要转发或重定向的路径
+             */
+            if (result == null || result.trim().isEmpty())
+                return;
+            if (result.contains(":")) {
+                //使用冒号分割字符串
+                int index = result.indexOf(":");
+                String prefix = result.substring(0,index);
+                String path = result.substring(index + 1, result.length());
+                if (prefix.equalsIgnoreCase("r")) {
+                    resp.sendRedirect(req.getContextPath() +  path);
+                } else if (prefix.equalsIgnoreCase("f")) {
+                    req.getRequestDispatcher(path).forward(req, resp);
+                } else {
+                    throw new RuntimeException("你指定的操作：" + prefix + "，当前版本还不支持");
+                }
+
+
+            } else {
+                req.getRequestDispatcher(result).forward(req,resp);
+            }
+        } catch (Exception e) {
+            System.out.println("您调用的方法：" + methodName + "，它内部抛出了异常！");
+            throw  new RuntimeException(e);
+        }
+    }
+#+END_SRC
+
+
+* 客户关系管理系统
+1. 导入原型(只有页面，没有功能的一个项目，功能都是直接跳转)！
+
+** 功能分析
+1. 添加用户
+2. 查询所有用户
+3. 编辑用户
+   - 加载到这个客户到表单中显示
+   - 修改客户
+4. 删除客户
+5. 多条件组合查询
+6. 创建表
+7. 创建包：公司名.项目名.分层，cn.devinkin.cstm
+   - cn.devinkin.cstm.domain：Customer，与表单和t_customer表对应
+   - cn.devinkin.cstm.dao：CustomerDao
+   - cn.devinkin.cstm.service：CustomerService，没有业务，其实它不存在都可以
+   - cn.devinkin.cstm.web.servlet：CustomerServlet
+
+8. 导包：
+   - mysql 驱动
+   - c3p0(两个jar，一个配置文件)
+   - dbutils
+   - 自己的工具 jdbcUtils，它在itcast-tools.jar
+   - beanutils.jar、logging.jar
+
+
+** 添加用户
+1. add.jsp -> CustomerServlet#add() -> 显示添加成功
+
+
+** 查询用户
+1. top.sp(查询用户) -> CustomerServlet#findAll() --> list.jsp(循环显示)
+
+** 编辑用户
+1. 通过cid查询
+   - list.jsp(编辑连接) -> CustomerServlet#preEdit() -> edit.jsp(把查询出的结果显示到表单中)
+   - edit.jsp(表单页面) -> Customerservlet()#edit() -> msg.jsp(显示成功信息)
+
+** 删除用户
+1. list.jsp(删除链接) -> Customerservlet#delete() -> msg.jsp
+
+
+** 多条件组合查询
+1. 使用StringBuilder拼接sql字符串
+2. 用List<Object> params 保存参数
