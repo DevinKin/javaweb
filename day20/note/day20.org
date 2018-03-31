@@ -1,0 +1,457 @@
+* Day20
+
+** 分页
+
+*** 什么是分页
+第N页/共M页 首页 上一页 1 2 3 4 5 6 7 *8* 9 10 下一页 尾页 go
+
+
+*** 分页的优点：
+只查询一页，不用查询所有页！
+
+
+** 分页数据
+1. 页面的数据都是由Servlet传递来的
+   - Servlet：
+     当前页：pageCode，pc；
+     - pc：如果页面没有传递当前页面，那么Servlet默认是第一页，否则按页面传递的为准！
+
+     总页数：totalPages：tp；
+     - tp：总记录数/每页记录数
+
+     总记录数：totalRecord, tr
+     - tr：dao来获取，SELECT COUNT(*) FROM t_customer;
+
+     每页记录数： 业务数据或系统数据！
+
+     当前页数据：beanList
+     
+     *url*
+
+
+** 数据的传递
+1. 这些分页数据总要在各层之间来回的传递！
+
+2. 我们把这些分页数据封装到一个javabean中，它就叫分页Bean，例如：PageBean
+
+3. PageBean
+#+BEGIN_SRC java
+import java.util.List;
+
+public class PageBean<T> {
+    //当前页码，page code
+    private int pc;
+    //总页数，total page
+    //private int tp;
+
+    //总记录数，total record
+    private int tr;
+    //每页记录数，page size
+    private int ps;
+    //当前页的记录
+    private List<T> beanList;
+
+    public int getPc() {
+        return pc;
+    }
+
+    public int getTp() {
+        int tp = tr/ps;
+        return tr % ps == 0?tp:tp+1;
+    }
+
+    public int getTr() {
+        return tr;
+    }
+
+    public int getPs() {
+        return ps;
+    }
+
+    public List<T> getBeanList() {
+        return beanList;
+    }
+
+    public void setPc(int pc) {
+        this.pc = pc;
+    }
+
+    public void setTr(int tr) {
+        this.tr = tr;
+    }
+
+    public void setPs(int ps) {
+        this.ps = ps;
+    }
+
+    public void setBeanList(List<T> beanList) {
+        this.beanList = beanList;
+    }
+}
+#+END_SRC
+
+
+** 分页在各层中的处理
+1.页面：给出分页相关的链接们！
+    - 页面需要给Servlet传递什么：有可能传递pc
+
+2.Servlet：创建PageBean对象，给PageBean所有的属性赋值，然后传递给页面
+    - Servlet需要给DAO传递pc、ps、
+3.Service：
+
+4.Dao：
+    - tr：SELECT COUNT(*) FROM t_customer;
+    - BeanList：SELECT *  FROM t_customer LIMIT x,y;
+
+
+** 显示分页页码列表
+1 2 3 4 5 6 7 8 9 10
+
+1. 最多显示多少个页码！定为10；
+
+2. 当前页在页码列表中的位置，定位6；
+
+3. 只需要当前页码来定出页码列表！定下来的页码列表只需要两样数据：
+   - begin：pc - 5
+
+   - end： pc + 4
+
+   - 特殊情况：pc < 6 && pc > tp - 4
+
+   - 计算公式：
+     - 如果tp<=10(列表长度)，那么begin=1,end=tp
+
+     - 如果tp>10：begin=pc-5 end=pc+4 
+       - 头溢出：begin < 1, begin=1 
+
+       - 尾溢出：end > tp，end=tp
+
+
+** 在超链接中要保留参数
+1. 当使用多条件查询后，然后在点击第2页时，这个第2页超链接没有条件了，所以会丢失条件，所以我们需要在页面上的所有链接都要保留条件！
+
+2. 我们把条件以一个字符串的形式保存到PageBean中的url中！这个任务交给Servlet
+
+
+** JavaWeb监听器
+1. JavaWeb三大组件
+   Servlet
+   Listener
+   Filter
+
+*** 监听器
+1. 它是一个接口，内容由我们来实现
+2. 它需要注册，例如注册在按钮上！
+3. 监听器中的方法，会在特殊时间发生时被调用
+
+
+*** JavaWeb监听器概述
+
+1. 在JavaWeb被监听的事件源为(三大域对象)：
+   ServletContext -- 服务器启动就出生，停止时候死亡
+   a. 生命周期监听：ServletContextListener
+   b. 属性监听：ServletContextAttributeListener
+	   
+   HttpSession -- 被访问的时候创建
+   a. 生命周期监听：HttpSessionListener
+   b. 属性监听：HttpSessionAttributeListener
+
+   ServletRequest -- 被访问动态资源的时候创建
+   a. 生命周期监听：ServletRequestListener
+   b. 属性监听：ServletRequestAttributeListener
+
+2. 监听域对象“创建”与“销毁”的监听器
+
+3. 监听域对象“操作域属性”的监听器
+
+4. 监听HttpSession的监听器。
+
+
+*** 创建与销毁监听器
+
+1. 创建与销毁监听器一共有三个：
+   (1)ServletContextListener：Tomcat启动和关闭时调用下面两个方法
+   - public void contextInitialized(ServletContextEvent evt)；ServletContext对象被创建后调用
+
+   - public void contextDestroyed(ServletContextEvent evt)；ServletContext对象被销毁前调用
+   
+   (2)HttpSessionListener：开始会话和结束会话时调用下面两个方法
+   - public void sessionCreated(HttpSessionEvent evt)：HttpSession对象被创建后调用；
+
+   - public void sessionDestroyed(HttpSessionEvent evt)：HttpSession对象被销毁前调用；
+
+   (3)ServletRequestListener：开始请求和结束请求时调用下面两个方法
+   - public void requestInitiallized(ServletRequestEvent evt)：ServletRequest对象被创建后调用；
+
+   - public void requestDestroyed(ServletRequestEvent evt)：ServletRequest对象被销毁前调用。
+
+
+*** 操作属性的监听器
+1. 操作域属性的监听器有三个
+   (1)ServletContextAttributeListener：在ServletContext域进行增、删、改属性时调用下面方法。
+   - public void attributeAdded(ServletContextAttributeEvent evt)
+
+   - public void attributeRemoved(ServletContextAttributeEvent evt)
+
+   - public void attributeReplaced(ServletContextAttributeEvent evt)
+
+   (2)HttpSessionAttributeListener：在HttpSession域进行增、删、改属性时调用下面方法
+   - public void attributeAdded(HttpSessionBindingEvent evt)
+
+   - public void attributeRemoved (HttpSessionBindingEvent evt)
+
+   - public void attributeReplaced (HttpSessionBindingEvent evt)
+
+   (3)ServletRequestAttributeListener：在ServletRequest域进行增、删、改属性时调用下面方法
+   - public void attributeAdded(ServletRequestAttributeEvent evt)
+
+   - public void attributeRemoved (ServletRequestAttributeEvent evt)
+
+   - public void attributeReplaced (ServletRequestAttributeEvent evt)
+	 
+
+*** 事件对象
+1. ServletContextEvent：ServletContext getServletContext()
+
+2. HttpSessionEvent：HttpSession getSession()
+
+3. ServletRequestEvent：
+   (1)ServletContext getServletContext()
+   (2)ServletRequest getServletRequest()
+
+4. ServletContextAttributeEvent：
+   ServiceContext getServletContext()
+   String getName()：获取属性名
+   Object getValue()：获取属性值
+
+5. HttpSessionBindingevent：
+   HttpSessionContext getHttpSessionContext()
+   String getName()：获取属性名
+   Object getValue()：获取属性值
+
+6. ServletRequestAttributeEvent：
+   ServletRequest getServletRequest()
+   String getName()：获取属性名
+   Object getValue()：获取属性值
+
+
+
+
+*** 感知监听器(都与HttpSession相关)
+1. 它用来添加到JavaBean上，而不是添加到三大域上！
+2. 这两个监听器都不需要在web.xml中注册！
+
+3. HttpSessionBindingListener：添加到javabean上，javabean就知道自己是否添加到session中
+#+BEGIN_SRC java
+package cn.devinkin.cstm.domain;
+
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
+
+public class User implements HttpSessionBindingListener{
+    private String username;
+    private String password;
+
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public void valueBound(HttpSessionBindingEvent httpSessionBindingEvent) {
+        System.out.println("session添加了我！");
+    }
+
+    @Override
+    public void valueUnbound(HttpSessionBindingEvent httpSessionBindingEvent) {
+        System.out.println("session抛弃了我");
+    }
+}
+#+END_SRC
+
+#+BEGIN_SRC jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%
+User user = new User();
+session.setAttribute("user",user);
+%>
+</body>
+</html>
+#+END_SRC
+
+#+BEGIN_SRC jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Title</title>
+</head>
+<body>
+<%
+    session.removeAttribute("user");
+%>
+
+</body>
+</html>
+#+END_SRC
+
+
+*** JavaWeb完成编写监听器：
+1. 步骤
+   (1)写一个监听器类：要求必须实现某个监听器接口
+#+BEGIN_SRC java
+package cn.devinkin.cstm.web.listener;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+import javax.servlet.http.HttpSessionAttributeListener;
+import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.http.HttpSessionListener;
+import javax.servlet.http.HttpSessionBindingEvent;
+
+/**
+ * ServletContext生死监听
+ * @author king
+ *
+ * 可以在监听器存放一些tomcat启动时就要完成的代码！
+ */
+@WebListener()
+public class AListener implements ServletContextListener,
+        HttpSessionListener, HttpSessionAttributeListener {
+
+    // Public constructor is required by servlet spec
+    public AListener() {
+    }
+
+    // -------------------------------------------------------
+    // ServletContextListener implementation
+    // -------------------------------------------------------
+    public void contextInitialized(ServletContextEvent sce) {
+      /* This method is called when the servlet context is
+         initialized(when the Web application is deployed). 
+         You can initialize servlet context related data here.
+      */
+      System.out.println("我出生了！");
+    }
+
+    public void contextDestroyed(ServletContextEvent sce) {
+      /* This method is invoked when the Servlet Context 
+         (the Web application) is undeployed or 
+         Application Server shuts down.
+      */
+      System.out.println("我死亡了！");
+    }
+
+    // -------------------------------------------------------
+    // HttpSessionListener implementation
+    // -------------------------------------------------------
+    public void sessionCreated(HttpSessionEvent se) {
+        /* Session is created. */
+    }
+
+    public void sessionDestroyed(HttpSessionEvent se) {
+        /* Session is destroyed. */
+    }
+
+    // -------------------------------------------------------
+    // HttpSessionAttributeListener implementation
+    // -------------------------------------------------------
+
+    public void attributeAdded(HttpSessionBindingEvent sbe) {
+      /* This method is called when an attribute 
+         is added to a session.
+      */
+    }
+
+    public void attributeRemoved(HttpSessionBindingEvent sbe) {
+      /* This method is called when an attribute
+         is removed from a session.
+      */
+    }
+
+    public void attributeReplaced(HttpSessionBindingEvent sbe) {
+      /* This method is invoked when an attibute
+         is replaced in a session.
+      */
+    }
+}
+#+END_SRC
+   (2)注册，是在web.xml中配置来完成注册！
+#+BEGIN_SRC xml
+    <listener>
+        <listener-class>cn.devinkin.cstm.web.listener.AListener</listener-class>
+    </listener>
+#+END_SRC
+
+
+** Session序列化
+1. HttpSessionActivationListener:Tomcat会在session从时间不被使用时钝化session对象，
+所谓钝化session，就是把session通过序列化的方式保存到硬盘文件中。当用户再使用session时，
+Tomcat还会把钝化的对象再活化session，所谓活化就是把硬盘文件中的session在反序列化回内存。
+当session被Tomcat钝化时，session中存储的对象也被纯化，当session被活化时，
+也会把session中存储的对象活化。如果某个类实现了HttpSessionActiveationListener接口后，
+当对象随着session被钝化和活化时，下面两个方法就会被调用：
+   public void sessionWillPassivate(HttpSessionEvent se)：当对象感知被活化时调用本方法；
+   public void sessionDidActivate(HttpSessionEvent se)：当对象感知被钝化时调用本方法；
+HttpSessionActivationListener监听器与HttpSessionBindingListener监听器相似，都是感知型的监听器，
+例如让Person类实现了HttpSessionActivationListener监听器接口，并把Person对象添加到了session中后，
+当Tomcat钝化session时，同时也会钝化session中的Person对象，这时Person对象就会感知到自己被钝化了，
+其实就是调用Person对象的sessionWillPassivate()方法。当用户再次使用session时，Tomcat会活化session，
+这时Person会感知到自己被活化，其实就是调用Person对象的sessionDidActivate()方法。
+
+
+2. 如何禁用session序列化
+   在conf/context.xml中添加如下内容
+#+BEGIN_SRC xml
+<Manager pathname=""/>
+#+END_SRC
+
+3. 如何使用Session钝化和活化
+- 在conf/catalina/localhost/项目名名称，仅在当前项目使用
+#+BEGIN_SRC xml
+<Context>
+	<Manager className="org.apache.catalina.session.PersistentManager" maxIdleSwap="1">
+		<Store className="org.apache.catalina.session.FileStore" directory="mysession"/>
+	</Manager>
+</Context>
+#+END_SRC
+- 在所有项目使用 conf/context.xml
+#+BEGIN_SRC xml
+<Context>
+	<Manager className="org.apache.catalina.session.PersistentManager" maxIdleSwap="1">
+		<Store className="org.apache.catalina.session.FileStore" directory="mysession"/>
+	</Manager>
+</Context>
+#+END_SRC
+
+- 等待一分钟后，在word/Catalina/localhost/day20/目录中出现mysession目录，说明session已经钝化

@@ -79,7 +79,7 @@ try {
    1. 查看隔离级别
        SELECT @@tx_isolation
    2. 设置当前连接的隔离级别
-       settransaction isolationlevel [4 选 1]
+      settransaction isolationlevel [4 选 1]
 
 ** JDBC设置隔离级别
    1. con.setTransactionisolation[int level]
@@ -160,6 +160,7 @@ try {
         con.close();
     }
 #+END_SRC
+
 
 ** 配置文件的要求
    1. 文件名称：必须叫c3p0-config.xml
