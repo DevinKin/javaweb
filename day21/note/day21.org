@@ -1,0 +1,240 @@
+* Day21
+
+** JavaWeb三大组件
+1. 都需要在web.xml中进行配置
+   Servlet
+   Listener(2个感知监听器不需要配置)
+   Filter
+
+
+** 过滤器
+1. 它会在一组资源(jsp、servlet、css、html等)的前面执行！
+它可以让请求达到目标资源，也可以不让请求达到目标资源！
+
+2. 过滤器有拦截请求的能力！
+
+
+** 过滤器如何编写
+
+*** 编写流程
+1. 编写一个类，实现Filter接口
+
+2. 在web.xml中进行配置
+
+
+*** Filter接口
+1. 三个生命周期方法
+   public void init(FilterConfig filterConfig)
+   - 创建之后，马上执行：Filter会在服务器启动时就创建！
+
+   public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+   - 每次过滤时都会执行
+
+   public void destroy()
+   - 销毁之前执行！在服务器关闭时销毁 
+
+2. Filter是单例的！
+
+
+*** web.xml中配置Filter
+1. 配置格式，与servlet类似
+#+BEGIN_SRC xml
+   <filter>
+     <filter-name>xxx</filter-name>
+     <filter-class>cn.devinkin.web.filter</filter-class>
+   </filter>
+   <filter-mapping>
+     <filter-name>xxx</filter-name>
+     <url-pattern>/*</url-pattern>
+     <servlet-name>BookServlet</servlet-name>
+   </filter-mapping>
+#+END_SRC
+
+
+*** doFilter的三大参数
+1. FilterConfig --> 与ServletConfig相似，作用：
+   - 获取初始化参数：getInitParameter()
+   - 获取过滤器名称：getFilterName()
+   - 获取初始化参数名字：getInitParameterNames()
+   - 获取application：getServletContext()
+
+
+1. FilterChan
+   - doFilter(ServletRequest, ServletResponse)：放行！放行，就相当于调用了目标Servlet的service()方法
+
+
+
+** 多过滤器
+1. FilterChain#doFilter()方法：
+   执行目标资源，或是执行下一个过滤器！如果没有下一个过滤器，那么执行的是目标资源，如果有，那么则执行下一个过滤器！
+
+
+
+** 过滤器的四种拦截方式
+*** 请求：DISPATCHER
+
+
+*** 转发：FORWARD
+
+
+*** 包含：INCLUDE
+
+
+*** 错误：ERROR
+
+
+*** 在<filter-mapping>中进行配置(默认REQUEST)：
+#+BEGIN_SRC xml
+<dispatcher>REQUEST</dispatcher>
+<dispatcher>FORWARD</dispatcher>
+<dispatcher>INCLUDE</dispatcher>
+<dispatcher>ERROR</dispatcher>
+#+END_SRC
+
+
+
+** 多个过滤器的执行顺序
+1. <filter-mapping>的配置顺序决定了过滤器的执行顺序！
+
+
+** 过滤器的应用场景
+1. 执行目标资源之前做预处理工作，例如设置编码，这种通常都会放行，只是在目标资源执行之前做一些准备工作
+2. 通过条件判断是否放行，例如校验用户是否已经登录，或者用户IP是否被禁用
+3. 在目标资源执行后，做一些后续的特殊处理工作
+
+
+
+
+** 分IP统计网站的访问次数
+1. 统计工作需要在所有资源之前都执行，那么就可以放到Filter中了。
+我们这个过滤器不做拦截操作！因为我们只是用来做统计的。
+
+1. 装载统计数据：Map<String, Integer>
+
+2. 整个网站只需一个Map即可
+   Map什么时候创建，Map保存到哪里？
+   - Map需要在Filter中用来保存数据
+
+   - Map需要在页面中使用，打印Map中的数据
+
+   - Map保存到ServletContext中
+
+   - Map在服务器开启时就创建，使用ServletContextListener。
+
+
+** 粗粒度权限控制(拦截是否登录、拦截用户名admin权限)
+*** RBAC
+1. RBAC -> 基于角色的权限控制
+   tb_user
+   tb_role
+   tb_userrole
+   tb_menu(增、删、改、查)
+   tb_rolemenu
+
+*** 说明
+	1. 我们给出三个页面：index.jsp、user.jsp、admin.jsp
+	   - index.jsp：谁都可以访问，没有限制；
+	   - user.jsp：只有登录用户可以访问
+	   - admin.jsp：只有管理员才能访问
+
+*** 分析
+1. 设计User类：username、password、grade，其中grade表示用户等级，1为普通用户，2表示管理员用户
+
+2. 当用户登录成功后，把user保存到session中
+
+3. 创建LoginFilter，它有两种过滤方式 
+   
+
+** 解决全站字符乱码(POST和GET中文编码问题)
+*** 说明
+1. 乱码问题：
+   - 获取请求参数中的乱码问题：
+	 POST请求：request.setCharacterEncoding("utf-8")
+	 GET请求：new String(request.getParameter("xxx").getBytes("iso-8859-1"), "utf-8");
+   
+   - 响应的乱码问题：
+	 response.setContextType("text/html;charset=utf-8")
+
+2. Filter
+#+BEGIN_SRC java
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
+        //处理post请求编码问题
+        req.setCharacterEncoding("utf-8");
+
+        /**
+         * 处理GET请求的编码问题
+         */
+//        String username=req.getParameter("username");
+//        username = new String(username.getBytes("ISO-8859-1"),"UTF-8");
+        /**
+         * 调包request
+         * 1. 写一个request的装饰类
+         * 2. 在放行时使用我们自己的request
+         */
+        EncodingRequest er = new EncodingRequest((HttpServletRequest) req);
+        chain.doFilter(er, resp);
+
+    }
+#+END_SRC
+
+3. Encoding
+#+BEGIN_SRC java
+    @Override
+    public String getParameter(String s) {
+        String value = request.getParameter(s);
+        try {
+            value = new String(value.getBytes("ISO-8859-1"),"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        return value;
+    }
+#+END_SRC
+
+
+** 页面静态化
+
+*** 步骤
+写一个小项目，图书管理
+
+
+
+*** 第一步：
+1. jsp: 链接页面，超链接：link.jsp
+   查看所有
+   查看SE分类
+   查看EE分类
+   查看框架分类
+
+2. jsp：显示查询结果show.jsp
+
+3. Servlet:
+   BookServlet
+   - findAll() --> 查看所有图书
+
+   - findByCategory --> 按分类进行查询
+
+4. BookService：略
+
+5. BookDao：
+   - List<Book> findAll()
+
+   - List<Book> findByCategory(int category)
+
+6. domain: Book类
+
+
+*** 第二步：什么是页面静态化
+1. 首次访问去数据库获取数据，然后把数据保存到html页面中
+
+2. 二次访问就不再去数据库获取了，而是直接显示html
+
+
+
+
+
+*** 目标
+1. 给出一个过滤器，servlet请求的资源所做的输出保存到html中，重定向到html页面，
+二次访问，这个html已经存在，那么直接重定向，不用再去访问servlet！
+
+2. 

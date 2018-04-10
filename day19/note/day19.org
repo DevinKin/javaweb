@@ -129,6 +129,7 @@
 ** 查询用户
 1. top.sp(查询用户) -> CustomerServlet#findAll() --> list.jsp(循环显示)
 
+
 ** 编辑用户
 1. 通过cid查询
    - list.jsp(编辑连接) -> CustomerServlet#preEdit() -> edit.jsp(把查询出的结果显示到表单中)

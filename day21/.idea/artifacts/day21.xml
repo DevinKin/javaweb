@@ -1,0 +1,25 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="day21">
+    <output-path>E:/apache-tomcat-7.0.85/webapps/day21</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="day21/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="day21" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="file-copy" path="$PROJECT_DIR$/web/lib/jstl.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/lib/standard.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/lib/servlet-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/lib/itcast-tools.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/lib/c3p0-0.9.2-pre1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/lib/commons-dbutils-1.4.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/lib/mchange-commons-0.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/lib/commons-logging-1.1.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/lib/commons-beanutils-1.8.3.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/lib/mysql-connector-java-5.1.13-bin.jar" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
