@@ -7,6 +7,31 @@
         <element id="directory" name="classes">
           <element id="module-output" name="day22" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="mysql-connector-java-5.1.28-bin" />
+          <element id="library" level="project" name="itcast-tools-1.4.2" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/jstl.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/mail.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/standard.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/itcast-tools.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/log4j-1.2.16.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/commons-io-1.4.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/c3p0-0.9.2-pre1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/itcast-tools-1.4.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/commons-dbutils-1.4.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/mchange-commons-0.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/commons-logging-1.1.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/commons-beanutils-1.8.3.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/commons-fileupload-1.2.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/mysql-connector-java-5.1.28-bin.jar" />
+          <element id="library" level="project" name="commons-io-1.4" />
+          <element id="library" level="project" name="jstl" />
+          <element id="library" level="project" name="commons-fileupload-1.2.2" />
+          <element id="library" level="project" name="itcast-tools" />
+          <element id="library" level="project" name="commons-logging-1.1.1" />
+          <element id="library" level="module" name="JUnit4" module-name="day22" />
+          <element id="library" level="project" name="mail" />
+        </element>
       </element>
     </root>
   </artifact>
