@@ -20,4 +20,40 @@
         <servlet-name>UploadServlet2</servlet-name>
         <url-pattern>/UploadServlet2</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UploadServlet3</servlet-name>
+        <servlet-class>cn.devinkin.web.servlet.UploadServlet3</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UploadServlet3</servlet-name>
+        <url-pattern>/UploadServlet3</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DownLoadServlet</servlet-name>
+        <servlet-class>cn.devinkin.web.servlet.DownLoadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DownLoadServlet</servlet-name>
+        <url-pattern>/DownLoadServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MyFileServlet</servlet-name>
+        <servlet-class>cn.devinkin.onlinehd.servlet.MyFileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MyFileServlet</servlet-name>
+        <url-pattern>/MyFileServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MyFileUploadServlet</servlet-name>
+        <servlet-class>cn.devinkin.onlinehd.servlet.MyFileUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MyFileUploadServlet</servlet-name>
+        <url-pattern>/MyFileUploadServlet</url-pattern>
+    </servlet-mapping>
 </web-app>
