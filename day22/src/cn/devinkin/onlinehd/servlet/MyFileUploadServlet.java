@@ -68,6 +68,7 @@ public class MyFileUploadServlet extends HttpServlet {
             dirFile.mkdirs();
             File destFile = new File(dirFile, myFile.getFramename());
             fi.write(destFile);
+            request.setAttribute("msg", "上传成功");
             request.getRequestDispatcher("/onlinehd/msg.jsp").forward(request,response);
 
         } catch (FileUploadException e) {

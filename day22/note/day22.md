@@ -109,7 +109,7 @@ sfu.setFileSizeMax(100 * 1024);  //限制单个文件为100K
 ```java
 sfu.parseRequest(request);
 ```
-如果上传的文件超出限制，在parseRequest方法会跑出异常
+如果上传的文件超出限制，在parseRequest方法会抛出异常
 
 2. 整个请求所有数据大小限制
     1. `sfu.setSizeMax(1024*1024);  //限制本个表单大小为1M`

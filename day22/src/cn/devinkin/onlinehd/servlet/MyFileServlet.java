@@ -2,6 +2,7 @@ package cn.devinkin.onlinehd.servlet;
 
 import cn.devinkin.onlinehd.domain.MyFile;
 import cn.devinkin.onlinehd.service.MyFileService;
+import cn.devinkin.web.down.utils.DownUtils;
 import cn.itcast.servlet.BaseServlet;
 import org.apache.commons.io.IOUtils;
 
@@ -44,8 +45,10 @@ public class MyFileServlet extends BaseServlet {
         //4.
         InputStream in = new FileInputStream(new File(filePath));
         String contentType = this.getServletContext().getMimeType(filePath);
-        String frameName = myFile.getFramename();
+        //设置下载文件时候编码
+        String frameName = DownUtils.filenameEncoding(myFile.getFramename(), request);
         String contentDispositon = "attachment;filename=" + frameName;
+
         response.setHeader("Content-Type", contentType);
         response.setHeader("Content-Disposition", contentDispositon);
         IOUtils.copy(in, response.getOutputStream());
