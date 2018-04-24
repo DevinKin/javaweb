@@ -49,5 +49,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="commons-beanutils-1.8.3" level="project" />
+    <orderEntry type="library" name="mchange-commons-0.2" level="project" />
+    <orderEntry type="library" name="commons-dbutils-1.4" level="project" />
   </component>
 </module>

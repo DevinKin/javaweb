@@ -586,3 +586,21 @@ public class AServlet extends javax.servlet.http.HttpServlet {
     2. JSONArray --> List
         1. toString()
         2. `JSONArray jsonArray = JSONObject.fromObject(list)`把对象转换成JSONArray对象
+        
+        
+# json省市联动
+1. dao：提供两个方法
+    1. 一个是查询所有省
+    2. 通过省名查询指定的市
+    
+2. servlet：两个方法
+    1. 一个把省转换成json，发送给客户端
+    2. 通过获取省份名称这个参数，然后查询该省下的所有市，转换成json，发送给客户端
+    
+3. ajax1.jsp
+    1. 页面加载完成后：访问servlet，得到所有省，然后显示在`<select id="province">`
+    2. 页面加载完成后：给`<select id="province>`添加onchange事件监听，获取选择的省名称，访问servlet，得到所有市，显示在`<select id="city">`中
+    
+    
+4. 一行记录对应多个对象时，需要使用Map来生成多个对象
+    1. 

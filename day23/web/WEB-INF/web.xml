@@ -56,4 +56,23 @@
         <servlet-name>DServlet</servlet-name>
         <url-pattern>/DServlet</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ProServlet</servlet-name>
+        <servlet-class>cn.devinkin.pcconnect.web.servlet.ProServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProServlet</servlet-name>
+        <url-pattern>/ProServlet</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>CTServlet</servlet-name>
+        <servlet-class>cn.devinkin.pcconnect.web.servlet.CTServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CTServlet</servlet-name>
+        <url-pattern>/CTServlet</url-pattern>
+    </servlet-mapping>
 </web-app>
