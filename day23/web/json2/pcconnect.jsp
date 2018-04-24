@@ -10,8 +10,7 @@
 <html>
 <head>
     <title>json省市联动</title>
-    <script type="text/javascript" src="/js/asynchronous.js"/>
-    <script type="text/javascript" src="/ajax-lib/ajaxutils.js"></script>
+    <script type="text/javascript" src="<c:url value='/js/asynchronous.js'/>"></script>
     <script type="text/javascript">
         window.onload = function (ev) {
             var pdata;

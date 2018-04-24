@@ -7,6 +7,34 @@
         <element id="directory" name="classes">
           <element id="module-output" name="day23" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="commons-dbutils-1.4" />
+          <element id="library" level="project" name="mchange-commons-0.2" />
+          <element id="library" level="project" name="commons-beanutils-1.8.3" />
+          <element id="library" level="module" name="JUnit5.0" module-name="day23" />
+          <element id="library" level="project" name="xpp3_min-1.1.4c" />
+          <element id="library" level="project" name="jaxen-1.1-beta-6" />
+          <element id="library" level="project" name="dom4j-1.6.1" />
+          <element id="library" level="project" name="jstl" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/jstl.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/xom-1.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/standard.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/dom4j-1.6.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/ezmorph-1.0.6.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/xstream-1.4.7.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/c3p0-0.9.2-pre1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/xpp3_min-1.1.4c.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/commons-lang-2.5.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/jaxen-1.1-beta-6.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/itcast-tools-1.4.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/json-lib-2.4-jdk15.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/commons-dbutils-1.4.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/mchange-commons-0.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/commons-logging-1.1.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/commons-beanutils-1.8.3.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/commons-collections-3.2.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/web/WEB-INF/lib/mysql-connector-java-5.1.28-bin.jar" />
+        </element>
       </element>
     </root>
   </artifact>
